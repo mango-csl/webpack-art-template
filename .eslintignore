@@ -1,0 +1,6 @@
+node_modules
+*.md
+*.scss
+*.less
+/dist/
+/src/styles/
