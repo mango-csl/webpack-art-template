@@ -91,7 +91,9 @@ module.exports = {
             except: ['$super', '$', 'exports', 'require'] // 排除关键字
         }),
         new HtmlWebpackPlugin({
-            filename: './views/index.html', // 生成的html存放路径，相对于path
+            // filename: './views/index.html', // 生成的html存放路径，相对于path
+            // todo 不知道为什么需要移除./views  跟route配置有关？
+            filename: 'index.html', // 生成的html存放路径，相对于path
             template: resolve(__dirname, './src/index.html'),
             favicon: resolve(__dirname, 'favicon.ico'),
             inject: 'body',

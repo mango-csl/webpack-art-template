@@ -29,6 +29,16 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
+//ignore favicon.ico request
+app.use(function (req, res, next) {
+    if (req.url === '/favicon.ico') {
+        console.log('ignore');
+    } else {
+        console.log(req.url);
+        res.end();
+    }
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     const err = new Error('Not Found');
@@ -61,12 +71,12 @@ app.use(function (err, req, res, next) {
     });
 });
 
-var server = app.listen(8081, function () {
-
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log('dev server on http://localhost:' + port + '\n');
-});
+// var server = app.listen(8081, function () {
+//
+//     var host = server.address().address;
+//     var port = server.address().port;
+//
+//     console.log('dev server on http://localhost:' + port + '\n');
+// });
 
 module.exports = app;
