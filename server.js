@@ -22,9 +22,9 @@ exec(cmdStr, function (err, stdout, stderr) {
 });
 
 //todo
-for (var i in config.entry) {
-    config.entry[i].unshift('webpack-dev-server/client?http://localhost:' + devPort, 'webpack/hot/dev-server');
-}
+// for (var i in config.entry) {
+//     config.entry[i].unshift('webpack-dev-server/client?http://localhost:' + devPort, 'webpack/hot/dev-server');
+// }
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
 var proxy = {
@@ -38,16 +38,17 @@ var app = new WebpackDevServer(compiler, {
     hot: true,
     proxy: proxy
 });
+app.listen(devPort, function () {
+    console.log('dev server on http://localhost:' + devPort + '\n');
+});
 
 var viewPath = path.join(__dirname, 'views');
 rm('-rf', viewPath);
 // // 在源码有更新时，更新模板
 compiler.plugin('emit', function (compilation, cb) {
-    console.log('compilation.assets = ', compilation.assets);
     for (var filename in compilation.assets) {
         if (filename.endsWith('.html')) {
             let filepath = path.resolve(viewPath, filename);
-            console.log('filepath = ', filepath, 'filename = ', filename);
             let dirname = path.dirname(filepath);
             if (!fs.existsSync(dirname)) {
                 mkdir('-p', dirname);
@@ -71,8 +72,4 @@ compiler.plugin('compilation', function (compilation) {
          */
         cb();
     });
-});
-
-app.listen(devPort, function () {
-    console.log('dev server on http://localhost:' + devPort + '\n');
 });

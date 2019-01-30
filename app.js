@@ -1,17 +1,17 @@
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const merge = require('webpack-merge');
+var express = require('express');
+var path = require('path');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var merge = require('webpack-merge');
 
 //todo
-const routes = require('./routes/index');
+var routes = require('./routes/index');
 
-const app = express();
+var app = express();
 
 // view engine setup
-const {artTemplateOption} = require('./lib/art-template.js');
+var {artTemplateOption} = require('./lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
     //todo
@@ -41,7 +41,7 @@ app.use(function (req, res, next) {
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    const err = new Error('Not Found');
+    var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
