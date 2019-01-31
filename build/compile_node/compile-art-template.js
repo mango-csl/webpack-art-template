@@ -8,55 +8,65 @@ const glob = require('glob');
 
 require('shelljs/global');
 
-// const entries = common.getEntry('src/views/**/*.html', 'src/views/');
-const entries = getEntry('src/views/**/*.html', 'src/views/');
+const webTile = '各个页面统一title';
+let renderData = {
+    'index.html': {
+        title: '首页 - ' + webTile,
+        pageNav: 'index'
+    },
+    'about.html': {
+        title: '首页 - ' + webTile,
+        pageNav: 'about'
+    },
+    'error.html': {
+        title: '错误 - ' + webTile,
+        message: '错误message',
+        error: {
+            status: 'error status',
+            stack: 'error stack'
+        }
+    }
+};
+
+//html模板所在页面
+const tempaltePath = 'src/views/';
+/**
+ * node端html模板渲染函数
+ * @param htmlToString
+ * @param renderData
+ * @param options
+ * @returns {*}
+ */
+let nodeRenderFn = function (htmlToString, renderData, options) {
+    return artTemplateRenderFn(htmlToString, renderData, Object.assign({}, {
+        root: rootPath + tempaltePath,
+        extname: '.html'
+        // imports: {
+        //     outSide: function (name) {
+        //         return 'outside' + name;
+        //     }
+        // }
+    }, options));
+};
+const entries = common.getEntry(path.join(rootPath, tempaltePath+ '*.html'), path.join(rootPath, tempaltePath));
 
 for (let item of Object.keys(entries)) {
     console.log('item  = ', item);
-    console.log('entries(item)  = ', entries(item));
-}
-let filePath = path.join(rootPath, 'src/views/about.html');
-fs.readFile(filePath, function (e, v) {
-        let ret = v.toString();
-        const data = {
-            title: '关于 - about',
-            pageNav: 'about'
-        };
-        const template = artTemplateRenderFn(ret, data, {
-            root: rootPath + 'src/views',
-            extname: '.html'
-            // imports: {
-            //     outSide: function (name) {
-            //         return 'outside' + name;
-            //     }
-            // }
-        });
+    console.log('entries(item)  = ', entries[item]);
+    let filePath = entries[item];
+    fs.readFile(filePath, function (e, v) {
+            let ret = v.toString();
+            const template = nodeRenderFn(ret, renderData[item]);
 
-        let dirname = path.dirname(filePath);
-        if (!fs.existsSync(dirname)) {
-            mkdir('-p', dirname);
+            let dirname = path.join(rootPath, 'src/compileViews/');
+            if (!fs.existsSync(dirname)) {
+                mkdir('-p', dirname);
+            }
+            fs.writeFile(path.join(rootPath, 'src/compileViews/' + item), template, function (err) {
+                if (err) throw err;
+            });
         }
-        fs.writeFile(path.join(rootPath, '/compileViews/about.html'), template, function (err) {
-            if (err) throw err;
-        });
-    }
-);
-
-function getEntry(globPath, pathDir) {
-    var files = glob.sync(globPath);
-    var entries = {}, entry, dirname, basename, pathname, extname;
-
-    for (var i = 0; i < files.length; i++) {
-        entry = files[i];
-        dirname = path.dirname(entry);
-        extname = path.extname(entry);
-        basename = path.basename(entry, extname);
-        pathname = path.normalize(path.join(dirname, basename));
-        pathDir = path.normalize(pathDir);
-        if (pathname.startsWith(pathDir)) {
-            pathname = pathname.substring(pathDir.length);
-        }
-        entries[pathname] = ['./' + entry];
-    }
-    return entries;
+    );
 }
+
+rm('-rf',  path.join(rootPath, 'dist'));

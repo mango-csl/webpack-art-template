@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node server",
     "start": "webpack-dev-server --config webpack.dev.config.js",
-    "build": "webpack --config webpack.dev.config.js --progress",
+    "node:compile": "node build/compile_node/compile-art-template",
+    "build": "webpack --config webpack.prod.config.js --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

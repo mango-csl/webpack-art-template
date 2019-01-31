@@ -18,7 +18,7 @@ var chunks = Object.keys(entries);
 var webpackConfig = {
     entry: entries,
     output: {
-        path: join(__dirname, 'dist'),
+        path: join(__dirname, 'public'),
         publicPath: '/static/',
         filename: 'scripts/[name].js',
         chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'

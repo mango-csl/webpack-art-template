@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/about', function (req, res, next) {
+router.get('/about.html', function (req, res, next) {
     res.render('about.html', {
         title: '关于 - ' + webTile,
         pageNav: 'about'
