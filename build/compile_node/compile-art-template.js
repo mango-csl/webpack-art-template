@@ -29,7 +29,9 @@ let renderData = {
 };
 
 //html模板所在页面
-const tempaltePath = 'src/views/';
+const tempaltePath = 'views/';
+const outPutPath = 'src/compileViews/';
+rm('-rf',  path.join(rootPath, outPutPath));
 /**
  * node端html模板渲染函数
  * @param htmlToString
@@ -58,15 +60,15 @@ for (let item of Object.keys(entries)) {
             let ret = v.toString();
             const template = nodeRenderFn(ret, renderData[item]);
 
-            let dirname = path.join(rootPath, 'src/compileViews/');
+            let dirname = path.join(rootPath, outPutPath);
             if (!fs.existsSync(dirname)) {
                 mkdir('-p', dirname);
             }
-            fs.writeFile(path.join(rootPath, 'src/compileViews/' + item), template, function (err) {
+            fs.writeFile(path.join(rootPath, outPutPath + item), template, function (err) {
                 if (err) throw err;
             });
         }
     );
 }
 
-rm('-rf',  path.join(rootPath, 'dist'));
+

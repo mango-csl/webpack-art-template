@@ -3,6 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.dev.config');
+var sysConfig = require('./sysConfig');
 
 require('shelljs/global');
 
@@ -34,7 +35,7 @@ var proxy = {
 var compiler = webpack(config);
 // 启动服务
 var app = new WebpackDevServer(compiler, {
-    publicPath: '/static/',
+    publicPath: sysConfig.dev.publicPath + '/',
     hot: true,
     proxy: proxy
 });
@@ -46,6 +47,7 @@ var viewPath = path.join(__dirname, 'views');
 rm('-rf', viewPath);
 // // 在源码有更新时，更新模板
 compiler.plugin('emit', function (compilation, cb) {
+    console.log('compilation.assets = ', compilation.assets);
     for (var filename in compilation.assets) {
         if (filename.endsWith('.html')) {
             let filepath = path.resolve(viewPath, filename);
@@ -53,9 +55,9 @@ compiler.plugin('emit', function (compilation, cb) {
             if (!fs.existsSync(dirname)) {
                 mkdir('-p', dirname);
             }
+            console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
             fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
                 if (err) throw err;
-                console.log('fs.writeFile success');
             });
         }
     }

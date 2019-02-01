@@ -2,7 +2,7 @@ var path = require('path');
 var {resolve, join} = path;
 var glob = require('glob');
 var webpack = require('webpack');
-var sysConfig = require('./config');
+var sysConfig = require('./sysConfig');
 var utils = require('./build/utils');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -19,7 +19,7 @@ var webpackConfig = {
     entry: entries,
     output: {
         path: join(__dirname, 'public'),
-        publicPath: '/static/',
+        publicPath: sysConfig.dev.publicPath + '/',
         filename: 'scripts/[name].js',
         chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
     },
@@ -28,7 +28,7 @@ var webpackConfig = {
             // ...utils.styleLoaders({sourceMap: sysConfig.dev.cssSourceMap, usePostCSS: true}),
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.less$/,
@@ -68,7 +68,8 @@ var webpackConfig = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
+                    name: utils.assetsPath('img/[name].[hash:7].[ext]'),
+                    publicPath: '../'
                 }
             },
             {

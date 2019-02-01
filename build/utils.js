@@ -1,9 +1,14 @@
 'use strict';
 const path = require('path');
-const config = require('../config');
+const config = require('../sysConfig');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // const packageConfig = require('../package.json');
 
+/**
+ * path 转成 posix 规范
+ * @param _path
+ * @returns {*}
+ */
 exports.assetsPath = function (_path) {
     const assetsSubDirectory = process.env.NODE_ENV === 'production'
         ? config.build.assetsSubDirectory
