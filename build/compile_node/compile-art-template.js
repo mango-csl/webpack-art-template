@@ -29,9 +29,9 @@ let renderData = {
 };
 
 //html模板所在页面
-const tempaltePath = 'views/';
-const outPutPath = 'src/compileViews/';
-rm('-rf',  path.join(rootPath, outPutPath));
+const tempaltePath = 'dist/temp_views/';
+const outPutPath = 'dist/';
+// rm('-rf',  path.join(rootPath, outPutPath));
 /**
  * node端html模板渲染函数
  * @param htmlToString
@@ -71,4 +71,4 @@ for (let item of Object.keys(entries)) {
     );
 }
 
-
+// rm('-rf',  path.join(rootPath, tempaltePath));

@@ -25,7 +25,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'public')));
+app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
+// app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static')));
+
 
 app.use('/', routes);
 

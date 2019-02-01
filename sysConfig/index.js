@@ -13,9 +13,13 @@ module.exports = {
     dev: {
         // Paths
         assetsSubDirectory: '',
-        publicPath:'/static',
+        publicPath: '/static',
+
+
         // todo 参数作用未定
         assetsPublicPath: '/',
+        outPutPath: path.join(__dirname, '../dist/static'),
+
         proxyTable: {
             '/getToken': {
                 target: 'http://192.168.0.237',
@@ -24,7 +28,7 @@ module.exports = {
                     '^/getToken': '/test/run'
                 }
             }
-        },
+        }
     },
 
     build: {
@@ -34,6 +38,6 @@ module.exports = {
         // Paths
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: '',
-        assetsPublicPath: '/',
+        assetsPublicPath: '/'
     }
 };
