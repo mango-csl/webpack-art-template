@@ -1,3 +1,6 @@
+// 移除node开发环境，webpack警告
+process.noDeprecation = true;
+
 var path = require('path');
 var {resolve, join} = path;
 var glob = require('glob');
@@ -54,6 +57,7 @@ var webpackConfig = {
                     }
                 }]
             },
+            // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
             // {
             //     test: /\.js$/,
             //     loader: 'babel-loader',
@@ -129,7 +133,7 @@ var webpackConfig = {
 var pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {
     var conf = {
-        filename: '../temp_views/' + pathname + '.html', // 生成的html存放路径，相对于path
+        filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于path
         template: 'src/views/' + pathname + '.html', // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
         /*

@@ -43,11 +43,11 @@ app.listen(devPort, function () {
     console.log('dev server on http://localhost:' + devPort + '\n');
 });
 
-var viewPath = path.join(__dirname, 'views');
+var viewPath = path.join(__dirname, sysConfig.dev.tplPath);
 rm('-rf', viewPath);
 // // 在源码有更新时，更新模板
 compiler.plugin('emit', function (compilation, cb) {
-    console.log('compilation.assets = ', compilation.assets);
+    // console.log('compilation.assets = ', compilation.assets);
     for (var filename in compilation.assets) {
         if (filename.endsWith('.html')) {
             let filepath = path.resolve(viewPath, filename);
@@ -55,7 +55,7 @@ compiler.plugin('emit', function (compilation, cb) {
             if (!fs.existsSync(dirname)) {
                 mkdir('-p', dirname);
             }
-            console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
+            // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
             fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
                 if (err) throw err;
             });

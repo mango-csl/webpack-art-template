@@ -17,6 +17,8 @@ app.set('view options', merge(artTemplateOption, {
     //todo
     extname: '.html'
 }));
+
+app.set('views',sysConfig.dev.tplPath);
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 

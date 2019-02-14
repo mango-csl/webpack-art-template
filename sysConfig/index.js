@@ -14,7 +14,7 @@ module.exports = {
         // Paths
         assetsSubDirectory: '',
         publicPath: '/static',
-
+        tplPath:'temp_views',
 
         // todo 参数作用未定
         assetsPublicPath: '/',

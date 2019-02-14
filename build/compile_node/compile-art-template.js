@@ -5,6 +5,7 @@ const fs = require('fs');
 const common = require('../common');
 const rootPath = path.join(__dirname, '../../');
 const glob = require('glob');
+var sysConfig = require('../../sysConfig');
 
 require('shelljs/global');
 
@@ -29,7 +30,7 @@ let renderData = {
 };
 
 //html模板所在页面
-const tempaltePath = 'dist/temp_views/';
+const tempaltePath = 'dist/' + sysConfig.dev.tplPath + '/';
 const outPutPath = 'dist/';
 // rm('-rf',  path.join(rootPath, outPutPath));
 /**
@@ -50,7 +51,7 @@ let nodeRenderFn = function (htmlToString, renderData, options) {
         // }
     }, options));
 };
-const entries = common.getEntry(path.join(rootPath, tempaltePath+ '*.html'), path.join(rootPath, tempaltePath));
+const entries = common.getEntry(path.join(rootPath, tempaltePath + '*.html'), path.join(rootPath, tempaltePath));
 
 for (let item of Object.keys(entries)) {
     console.log('item  = ', item);
