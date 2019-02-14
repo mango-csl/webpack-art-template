@@ -6,7 +6,7 @@
     "dev": "node server",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.dev.config.js --progress --hide-modules",
     "node:compile": "node build/compile_node/compile-art-template",
-    "build":"npm run build:webpack&&npm run node:compile"
+    "build": "npm run build:webpack&&npm run node:compile"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.23.1",
     "eslint": "^4.2.0",
+    "eslint-config-djcps": "^0.0.4",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^4.0.2",
