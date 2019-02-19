@@ -11,33 +11,27 @@ let path = require('path');
 // }
 module.exports = {
     dev: {
+        host: 'localhost',
+        port: 2082,
+        autoOpenBrowser: true,
         // Paths
         assetsSubDirectory: '',
         publicPath: '/static',
-        tplPath:'temp_views',
-
-        // todo 参数作用未定
-        assetsPublicPath: '/',
+        tplPath: 'temp_views',
         outPutPath: path.join(__dirname, '../dist/static'),
 
         proxyTable: {
-            '/getToken': {
-                target: 'http://192.168.0.237',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/getToken': '/test/run'
-                }
-            }
+            '/djwmsservice': 'http://192.168.2.167:3000'
         }
     },
 
     build: {
         // Template for index.html
-        index: path.resolve(__dirname, '../dist/index.html'),
-
-        // Paths
-        assetsRoot: path.resolve(__dirname, '../dist'),
+        // index: path.resolve(__dirname, '../dist/index.html'),
+        //
+        // // Paths
+        // assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: '',
-        assetsPublicPath: '/'
+        // assetsPublicPath: '/'
     }
 };

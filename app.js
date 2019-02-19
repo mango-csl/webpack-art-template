@@ -1,35 +1,38 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var merge = require('webpack-merge');
-var sysConfig = require('./sysConfig');
-//todo
-var routes = require('./routes/index');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const merge = require('webpack-merge');
+const sysConfig = require('./sysConfig');
+const routes = require('./routes/index');
 
-var app = express();
+// 代理插件
+const proxy = require('http-proxy-middleware');
+const cors = require('cors');
+
+const app = express();
+// todo cors将设置access-control-allow-origin:*,解决跨域问题( express proxy)
+app.use(cors());
 
 // view engine setup
-var {artTemplateOption} = require('./lib/art-template.js');
+const {artTemplateOption} = require('./lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
-    //todo
+    //todo 配置项确定
     extname: '.html'
 }));
 
-app.set('views',sysConfig.dev.tplPath);
+app.set('views', path.join(__dirname, sysConfig.dev.tplPath));
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
-//todo
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
 // app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static')));
-
 
 app.use('/', routes);
 
@@ -43,9 +46,16 @@ app.use(function (req, res, next) {
     }
 });
 
+// 设置代理
+app.use('*', proxy({
+    // target: 'https://api.douban.com/',
+    target: 'http://192.168.2.167:3000',
+    changeOrigin: true
+}));
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
@@ -75,10 +85,10 @@ app.use(function (err, req, res, next) {
     });
 });
 
-// var server = app.listen(8081, function () {
+// const server = app.listen(8081, function () {
 //
-//     var host = server.address().address;
-//     var port = server.address().port;
+//     const host = server.address().address;
+//     const port = server.address().port;
 //
 //     console.log('dev server on http://localhost:' + port + '\n');
 // });
