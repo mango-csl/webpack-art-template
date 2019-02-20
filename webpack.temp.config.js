@@ -119,6 +119,16 @@ var webpackConfig = {
         })
     ]
 };
+var hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
+
+//todo webpack/hot/dev-server？
+for (const key of Object.keys(webpackConfig.entry)) {
+    webpackConfig.entry[key].unshift(hotMiddlewareScript);
+}
+webpackConfig.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+);
 
 var pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {

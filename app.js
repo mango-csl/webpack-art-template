@@ -1,3 +1,4 @@
+const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -47,50 +48,27 @@ app.use(function (req, res, next) {
 });
 
 // 设置代理
-app.use('*', proxy({
+app.use('/dj_server', proxy({
     // target: 'https://api.douban.com/',
-    target: 'http://192.168.2.167:3000',
+    target: 'http://localhost:3999',
+    pathRewrite: {'^/dj_server': ''},
     changeOrigin: true
 }));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    next(createError(404));
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        console.log(err);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
+// error handler
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-// const server = app.listen(8081, function () {
-//
-//     const host = server.address().address;
-//     const port = server.address().port;
-//
-//     console.log('dev server on http://localhost:' + port + '\n');
-// });
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
 
 module.exports = app;

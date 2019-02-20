@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node server",
+    "browsersync": "cross-env NODE_ENV=development node app_temp",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.dev.config.js --progress --hide-modules",
     "node:compile": "node build/compile_node/compile-art-template",
     "build": "npm run build:webpack&&npm run node:compile"
@@ -12,14 +13,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "art-template": "^4.13.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
+    "debug": "~2.6.9",
     "express": "^4.16.4",
+    "http-errors": "~1.6.2",
+    "http-proxy": "^1.17.0",
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "art-template": "^4.13.2",
     "art-template-loader": "^1.4.3",
     "autoprefixer": "^7.1.2",
     "autoprefixer-loader": "^3.2.0",
@@ -29,6 +33,7 @@
     "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-stage-3": "^6.17.0",
+    "browser-sync": "^2.26.3",
     "cross-env": "^3.0.0",
     "css-loader": "^0.23.1",
     "eslint": "^4.2.0",
