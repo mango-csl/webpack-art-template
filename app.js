@@ -37,6 +37,14 @@ app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
 
 app.use('/', routes);
 
+// 设置代理 attention：set in the top
+app.use('/dj_server', proxy({
+    // target: 'https://api.douban.com/',
+    target: 'http://localhost:3999',
+    pathRewrite: {'^/dj_server': ''},
+    changeOrigin: true
+}));
+
 //ignore favicon.ico request
 app.use(function (req, res, next) {
     if (req.url === '/favicon.ico') {
@@ -46,14 +54,6 @@ app.use(function (req, res, next) {
         res.end();
     }
 });
-
-// 设置代理
-app.use('/dj_server', proxy({
-    // target: 'https://api.douban.com/',
-    target: 'http://localhost:3999',
-    pathRewrite: {'^/dj_server': ''},
-    changeOrigin: true
-}));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

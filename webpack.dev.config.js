@@ -1,24 +1,23 @@
 // 移除node开发环境，webpack警告
 process.noDeprecation = true;
 
-var path = require('path');
-var {resolve, join} = path;
-var glob = require('glob');
-var webpack = require('webpack');
-var sysConfig = require('./sysConfig');
-var utils = require('./build/utils');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const glob = require('glob');
+const webpack = require('webpack');
+const sysConfig = require('./sysConfig');
+const utils = require('./build/utils');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const debug = process.env.NODE_ENV !== 'production';
 
-var debug = process.env.NODE_ENV !== 'production';
+const entries = getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
+const chunks = Object.keys(entries);
 
-var entries = getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
-var chunks = Object.keys(entries);
-
-var webpackConfig = {
+let webpackConfig = {
     entry: entries,
     output: {
         // path: join(__dirname, 'dist/static'),
@@ -101,6 +100,7 @@ var webpackConfig = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist']),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'
         }),
@@ -120,9 +120,9 @@ var webpackConfig = {
     ]
 };
 
-var pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
+const pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {
-    var conf = {
+    const conf = {
         filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于path
         template: 'src/views/' + pathname + '.html', // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
@@ -149,10 +149,11 @@ pages.forEach(function (pathname) {
 module.exports = webpackConfig;
 
 function getEntry(globPath, pathDir) {
-    var files = glob.sync(globPath);
-    var entries = {}, entry, dirname, basename, pathname, extname;
+    const files = glob.sync(globPath);
+    const entries = {};
+    let {entry, dirname, basename, pathname, extname} = {};
 
-    for (var i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         entry = files[i];
         dirname = path.dirname(entry);
         extname = path.extname(entry);

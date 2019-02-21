@@ -35,27 +35,5 @@ function getTest() {
             console.log('error = ', err);
         }
     });
-    // ---------------------
-    //     作者：wopelo
-    // 来源：CSDN
-    // 原文：https://blog.csdn.net/wopelo/article/details/79802585
-    //     版权声明：本文为博主原创文章，转载请附上博文链接！
 }
 
-function github_test() {
-    var native = new XMLHttpRequest();
-    native.open("GET", "https://api.github.com/");
-    native.send();
-    native.onreadystatechange = function () {
-        if (native.readyState == 4 && native.status == 200) {
-            console.log(native.response);
-        } else {
-            console.log(native.status);
-        }
-    };
-    // ---------------------
-    //     作者：wopelo
-    // 来源：CSDN
-    // 原文：https://blog.csdn.net/wopelo/article/details/79802585
-    //     版权声明：本文为博主原创文章，转载请附上博文链接！
-}
