@@ -38,7 +38,17 @@ app.use(cookieParser());
 app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
 // app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static')));
 
+app.locals.env = process.env.NODE_ENV || 'dev';
+
 app.use('/', routes);
+
+// 设置代理
+app.use('/dj_server', proxy({
+    // target: 'https://api.douban.com/',
+    target: 'http://localhost:3999',
+    pathRewrite: {'^/dj_server': ''},
+    changeOrigin: true
+}));
 
 //ignore favicon.ico request
 app.use(function (req, res, next) {
@@ -49,14 +59,6 @@ app.use(function (req, res, next) {
         res.end();
     }
 });
-
-// 设置代理
-app.use('/dj_server', proxy({
-    // target: 'https://api.douban.com/',
-    target: 'http://localhost:3999',
-    pathRewrite: {'^/dj_server': ''},
-    changeOrigin: true
-}));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -91,7 +93,7 @@ if (isDev) {
 }
 
 if (isDev) {
-    const serverPort = 25999;
+    const serverPort = 24999;
     const webpack = require('webpack');
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -107,41 +109,43 @@ if (isDev) {
         }
     }));
     app.use(webpackHotMiddleware(compiler));
-
+    const port = sysConfig.dev.port;
+    // sysConfig.dev.port
     // browsersync is a nice choice when modifying only views (with their css & js)
-    const bs = require('browser-sync').create();
-    app.listen(sysConfig.dev.port, function () {
+    let bs = require('browser-sync').create();
+    app.listen(port, function () {
         bs.init({
             open: false,
             ui: false,
             notify: false,
-            proxy: 'localhost:' + sysConfig.dev.port,
+            proxy: 'localhost:' + port,
             files: ['./src/views/**'],
-            serverPort: serverPort
+            // 当前版本 browser-sync，配置项key值不同
+            port: serverPort
         });
         console.log(`App (dev) is going to be running on port ${serverPort} (by browsersync).`);
     });
 
-    var viewPath = path.join(__dirname, sysConfig.dev.tplPath);
-    rm('-rf', viewPath);
-    // 在源码有更新时，更新模板
-    compiler.plugin('emit', function (compilation, cb) {
-        // console.log('compilation.assets = ', compilation.assets);
-        for (var filename in compilation.assets) {
-            if (filename.endsWith('.html')) {
-                let filepath = path.resolve(viewPath, filename);
-                let dirname = path.dirname(filepath);
-                if (!fs.existsSync(dirname)) {
-                    mkdir('-p', dirname);
-                }
-                // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
-                fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
-                    if (err) throw err;
-                });
-            }
-        }
-        cb();
-    });
+    // var viewPath = path.join(__dirname, sysConfig.dev.tplPath);
+    // rm('-rf', viewPath);
+    // // 在源码有更新时，更新模板
+    // compiler.plugin('emit', function (compilation, cb) {
+    //     // console.log('compilation.assets = ', compilation.assets);
+    //     for (var filename in compilation.assets) {
+    //         if (filename.endsWith('.html')) {
+    //             let filepath = path.resolve(viewPath, filename);
+    //             let dirname = path.dirname(filepath);
+    //             if (!fs.existsSync(dirname)) {
+    //                 mkdir('-p', dirname);
+    //             }
+    //             // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
+    //             fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
+    //                 if (err) throw err;
+    //             });
+    //         }
+    //     }
+    //     cb();
+    // });
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
     app.listen(sysConfig.dev.port, function () {

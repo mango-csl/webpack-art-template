@@ -123,7 +123,7 @@ let webpackConfig = {
 const pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {
     const conf = {
-        filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于path
+        filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
         template: 'src/views/' + pathname + '.html', // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
         /*

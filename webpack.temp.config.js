@@ -18,12 +18,13 @@ var debug = process.env.NODE_ENV !== 'production';
 var entries = getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 var chunks = Object.keys(entries);
 
+// todo 配置还存在问题  图片和资源无法获取到
 var webpackConfig = {
     entry: entries,
     output: {
         // path: join(__dirname, 'dist/static'),
         path: sysConfig.dev.outPutPath,
-        publicPath: sysConfig.dev.publicPath + '/',
+        publicPath: `http://localhost:${sysConfig.dev.port}/${sysConfig.dev.publicPath}/`,
         filename: 'scripts/[name].js',
         chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
     },
