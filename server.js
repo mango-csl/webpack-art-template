@@ -50,26 +50,26 @@ new WebpackDevServer(compiler, options).listen(sysConfig.dev.port, sysConfig.dev
     }
 });
 
-// const viewPath = path.join(__dirname, sysConfig.dev.tplPath);
-// rm('-rf', viewPath);
-// // // 在源码有更新时，更新模板
-// compiler.plugin('emit', function (compilation, cb) {
-//     // console.log('compilation.assets = ', compilation.assets);
-//     for (const filename in compilation.assets) {
-//         if (filename.endsWith('.html')) {
-//             let filepath = path.resolve(viewPath, filename);
-//             let dirname = path.dirname(filepath);
-//             if (!fs.existsSync(dirname)) {
-//                 mkdir('-p', dirname);
-//             }
-//             // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
-//             fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
-//                 if (err) throw err;
-//             });
-//         }
-//     }
-//     cb();
-// });
+const viewPath = path.join(__dirname, sysConfig.dev.tplPath);
+rm('-rf', viewPath);
+// // 在源码有更新时，更新模板
+compiler.plugin('emit', function (compilation, cb) {
+    // console.log('compilation.assets = ', compilation.assets);
+    for (const filename in compilation.assets) {
+        if (filename.endsWith('.html')) {
+            let filepath = path.resolve(viewPath, filename);
+            let dirname = path.dirname(filepath);
+            if (!fs.existsSync(dirname)) {
+                mkdir('-p', dirname);
+            }
+            // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
+            fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
+                if (err) throw err;
+            });
+        }
+    }
+    cb();
+});
 //
 // // 当页面模板有改变时，强制刷新页面
 // compiler.plugin('compilation', function (compilation) {
