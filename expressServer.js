@@ -1,5 +1,6 @@
-const createError = require('http-errors');
 const express = require('express');
+// const fs = require('fs');
+// require('shelljs/global');
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -13,7 +14,9 @@ const proxy = require('http-proxy-middleware');
 const cors = require('cors');
 
 const app = express();
-// todo cors将设置access-control-allow-origin:*,解决跨域问题( express proxy)
+// const isDev = app.get('env') === 'development';
+
+//cors将设置access-control-allow-origin:*,解决跨域问题( express proxy)
 app.use(cors());
 
 // view engine setup
@@ -32,12 +35,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
-// app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static')));
+
+// app.locals.env = process.env.NODE_ENV || 'dev';
 
 app.use('/', routes);
 
-// 设置代理 attention：set in the top
+// 设置代理
 app.use('/dj_server', proxy({
     // target: 'https://api.douban.com/',
     target: 'http://localhost:3999',
@@ -47,28 +50,42 @@ app.use('/dj_server', proxy({
 
 //ignore favicon.ico request
 app.use(function (req, res, next) {
-    if (req.url === '/favicon.ico') {
-        console.log('ignore');
-    } else {
-        console.log(req.url);
-        res.end();
-    }
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    });
+    // if (req.url === '/favicon.ico') {
+    //     console.log('ignore /favicon.ico');
+    // } else {
+    //     res.end();
+    // }
+    res.end();
 });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-// error handler
+// error handlers
+
+// development error handler
+// will print stacktrace
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    console.log(err);
+    res.render('error', {
+        message: err.message,
+        error: err
+    });
 });
 
-module.exports = app;
+const port = process.env.PORT || sysConfig.dev.expressPort;
+app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.listen(port, function () {
+    console.log(`App (production) is now running on port ${port}!`);
+});

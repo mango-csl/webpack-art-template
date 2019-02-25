@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node server",
-    "browsersync": "cross-env NODE_ENV=development node app_temp",
+    "start": "concurrently \"node expressServer\" \"node webpackDevServer\"",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.dev.config.js --progress --hide-modules",
     "node:compile": "node build/compile_node/compile-art-template",
     "build": "npm run build:webpack&&npm run node:compile"
@@ -13,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "art-template": "^4.13.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
@@ -60,6 +60,7 @@
     "postcss-uncss": "^0.15.0",
     "postcss-write-svg": "jonathantneal/postcss-write-svg",
     "reload": "^2.4.0",
+    "resolve-url-loader": "^3.0.1",
     "shelljs": "^0.8.3",
     "style-loader": "^0.13.0",
     "url-loader": "^1.1.2",

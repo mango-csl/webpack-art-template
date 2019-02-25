@@ -2,38 +2,20 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./webpack.dev.config');
+const config = require('./build/webpack.temp.config');
 const sysConfig = require('./sysConfig');
-const merge = require('webpack-merge');
 require('shelljs/global');
 
-const serverPort = 24999;
-
-const exec = require('child_process').exec;
-const cmdStr = `cross-env PORT=${serverPort} supervisor ./bin/www`;
-
-exec(cmdStr, function (err, stdout, stderr) {
-    if (err) {
-        console.error('err = ', err);
-    } else {
-        console.log('stdout = ', stdout);
-    }
-});
-
-//todo webpack/hot/dev-server？
-// for (const i in config.entry) {
-//     config.entry[i].unshift('webpack-dev-server/client?http://localhost:' + sysConfig.dev.port, 'webpack/hot/dev-server');
-// }
-config.plugins.push(new webpack.HotModuleReplacementPlugin());
+let expressPort = sysConfig.dev.expressPort || 24999;
+let serverPort = sysConfig.dev.serverPort || 2082;
 
 const options = {
-    contentBase: './dist',
-    publicPath: sysConfig.dev.publicPath + '/',
+    publicPath: '/',
     hot: true,
-    port: sysConfig.dev.port,
+    port: serverPort,
     host: sysConfig.dev.host,
     proxy: {
-        '*': 'http://localhost:' + serverPort
+        '*': 'http://localhost:' + expressPort
     }
     // open: sysConfig.dev.autoOpenBrowser
 };
@@ -42,11 +24,11 @@ WebpackDevServer.addDevServerEntrypoints(config, options);
 
 const compiler = webpack(config);
 // 启动服务
-new WebpackDevServer(compiler, options).listen(sysConfig.dev.port, sysConfig.dev.host, function (err) {
+new WebpackDevServer(compiler, options).listen(serverPort, sysConfig.dev.host, function (err) {
     if (err) {
         console.log(err);
     } else {
-        console.log(`dev server on http://${sysConfig.dev.host}:${sysConfig.dev.port}\n`);
+        console.log(`dev server on http://${sysConfig.dev.host}:${serverPort}\n`);
     }
 });
 

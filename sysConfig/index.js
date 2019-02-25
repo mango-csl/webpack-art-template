@@ -11,18 +11,16 @@ let path = require('path');
 // }
 module.exports = {
     dev: {
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 2082,
+        serverPort: 2082,
+        expressPort: 24999,
         autoOpenBrowser: true,
         // Paths
         assetsSubDirectory: '',
         publicPath: '/static',
         tplPath: 'temp_views',
-        outPutPath: path.join(__dirname, '../dist/static'),
-
-        proxyTable: {
-            '/djwmsservice': 'http://192.168.2.167:3000'
-        }
+        outPutPath: path.join(__dirname, '../dist/static')
     },
 
     build: {
@@ -31,7 +29,7 @@ module.exports = {
         //
         // // Paths
         // assetsRoot: path.resolve(__dirname, '../dist'),
-        assetsSubDirectory: '',
+        assetsSubDirectory: ''
         // assetsPublicPath: '/'
     }
 };

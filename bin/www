@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../dev_temp/app');
 var debug = require('debug')('webpack-art-template:server');
 var reload = require('reload');
 var http = require('http');

@@ -1,26 +1,28 @@
 const express = require('express');
 const fs = require('fs');
-require('shelljs/global');
+// require('shelljs/global');
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const merge = require('webpack-merge');
-const sysConfig = require('./sysConfig');
-const routes = require('./routes/index');
+const sysConfig = require('../sysConfig/index');
+const routes = require('../routes/index');
 
 // 代理插件
 const proxy = require('http-proxy-middleware');
 const cors = require('cors');
 
 const app = express();
-const isDev = app.get('env') === 'development';
+// const isDev = app.get('env') === 'development';
+
+const isDev = false;
 
 // todo cors将设置access-control-allow-origin:*,解决跨域问题( express proxy)
 app.use(cors());
 
 // view engine setup
-const {artTemplateOption} = require('./lib/art-template.js');
+const {artTemplateOption} = require('../lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
     //todo 配置项确定
@@ -31,14 +33,15 @@ app.set('views', path.join(__dirname, sysConfig.dev.tplPath));
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
-// app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static')));
+// app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
 
-app.locals.env = process.env.NODE_ENV || 'dev';
+// app.use(sysConfig.dev.publicPath, express.static(path.join(__dirname, 'dist/static'))); //delete
+
+// app.locals.env = process.env.NODE_ENV || 'dev';
 
 app.use('/', routes);
 
@@ -97,7 +100,7 @@ if (isDev) {
     const webpack = require('webpack');
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const webpackHotMiddleware = require('webpack-hot-middleware');
-    const webpackDevConfig = require('./webpack.temp.config.js');
+    const webpackDevConfig = require('../build/webpack.temp.config.js');
 
     const compiler = webpack(webpackDevConfig);
 
@@ -119,38 +122,40 @@ if (isDev) {
             ui: false,
             notify: false,
             proxy: 'localhost:' + port,
-            files: ['./src/views/**'],
+            // files: ['./src/views/**'],
             // 当前版本 browser-sync，配置项key值不同
             port: serverPort
         });
         console.log(`App (dev) is going to be running on port ${serverPort} (by browsersync).`);
     });
 
-    // var viewPath = path.join(__dirname, sysConfig.dev.tplPath);
-    // rm('-rf', viewPath);
-    // // 在源码有更新时，更新模板
-    // compiler.plugin('emit', function (compilation, cb) {
-    //     // console.log('compilation.assets = ', compilation.assets);
-    //     for (var filename in compilation.assets) {
-    //         if (filename.endsWith('.html')) {
-    //             let filepath = path.resolve(viewPath, filename);
-    //             let dirname = path.dirname(filepath);
-    //             if (!fs.existsSync(dirname)) {
-    //                 mkdir('-p', dirname);
-    //             }
-    //             // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
-    //             fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
-    //                 if (err) throw err;
-    //             });
-    //         }
-    //     }
-    //     cb();
-    // });
+    var viewPath = path.join(__dirname, sysConfig.dev.tplPath);
+    rm('-rf', viewPath);
+    // 在源码有更新时，更新模板
+    compiler.plugin('emit', function (compilation, cb) {
+        // console.log('compilation.assets = ', compilation.assets);
+        for (var filename in compilation.assets) {
+            if (filename.endsWith('.html')) {
+                let filepath = path.resolve(viewPath, filename);
+                let dirname = path.dirname(filepath);
+                if (!fs.existsSync(dirname)) {
+                    mkdir('-p', dirname);
+                }
+                // console.log('compilation.assets[filename].source() = ', compilation.assets[filename].source());
+                fs.writeFile(filepath, compilation.assets[filename].source(), (err) => {
+                    if (err) throw err;
+                });
+            }
+        }
+        cb();
+    });
 } else {
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.listen(sysConfig.dev.port, function () {
-        console.log(`App (production) is now running on port ${sysConfig.dev.port}!`);
+    var port = process.env.PORT || sysConfig.dev.expressPort;
+    app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
+    // app.use(express.static(path.join(__dirname, 'public')));
+    app.listen(port, function () {
+        console.log(`App (production) is now running on port ${port}!`);
     });
 }
 
-module.exports = app;
+// module.exports = app;

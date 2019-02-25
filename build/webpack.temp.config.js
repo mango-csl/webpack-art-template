@@ -1,33 +1,32 @@
 // 移除node开发环境，webpack警告
 process.noDeprecation = true;
 
-var path = require('path');
-var {resolve, join} = path;
-var glob = require('glob');
-var webpack = require('webpack');
-var sysConfig = require('./sysConfig');
-var utils = require('./build/utils');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const glob = require('glob');
+const webpack = require('webpack');
+const sysConfig = require('../sysConfig/index');
+const utils = require('./utils');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-var debug = process.env.NODE_ENV !== 'production';
-
-var entries = getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
-var chunks = Object.keys(entries);
-
-// todo 配置还存在问题  图片和资源无法获取到
-var webpackConfig = {
+const debug = process.env.NODE_ENV !== 'production';
+const relatePath = '';
+const entries = getEntry(relatePath + 'src/scripts/page/**/*.js', relatePath + 'src/scripts/page/');
+const chunks = Object.keys(entries);
+const publicPath = debug ? `http://192.168.2.167:${sysConfig.dev.port}/` : `.${sysConfig.dev.publicPath}/`;
+let webpackConfig = {
     entry: entries,
     output: {
-        // path: join(__dirname, 'dist/static'),
-        path: sysConfig.dev.outPutPath,
-        publicPath: `http://localhost:${sysConfig.dev.port}/${sysConfig.dev.publicPath}/`,
+        // path: sysConfig.dev.outPutPath,
+        path: '/',
+        publicPath: publicPath,
         filename: 'scripts/[name].js',
         chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
     },
+    devtool: 'eval-source-map',
     module: {
         rules: [
             // ...utils.styleLoaders({sourceMap: sysConfig.dev.cssSourceMap, usePostCSS: true}),
@@ -59,23 +58,22 @@ var webpackConfig = {
                 }]
             },
             // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
-            // {
-            //     test: /\.js$/,
-            //     loader: 'babel-loader',
-            //     //resolve('node_modules/djcpsweb')
-            //     include: [
-            //         resolve('src'),
-            //         resolve('test'),
-            //         resolve('node_modules/webpack-dev-server/client')
-            //     ]
-            // },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                include: [
+                    resolve('src'),
+                    // resolve('test'),
+                    resolve('node_modules/webpack-dev-server/client')
+                ]
+            },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]'),
-                    publicPath: '../'
+                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
+                    // publicPath: '../'
                 }
             },
             {
@@ -102,6 +100,7 @@ var webpackConfig = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist']),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'
         }),
@@ -120,7 +119,7 @@ var webpackConfig = {
         })
     ]
 };
-var hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
+const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
 
 //todo webpack/hot/dev-server？
 for (const key of Object.keys(webpackConfig.entry)) {
@@ -131,9 +130,9 @@ webpackConfig.plugins.push(
     new webpack.NoEmitOnErrorsPlugin()
 );
 
-var pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
+const pages = Object.keys(getEntry(relatePath + 'src/views/**/*.html', relatePath + 'src/views/'));
 pages.forEach(function (pathname) {
-    var conf = {
+    const conf = {
         filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于path
         template: 'src/views/' + pathname + '.html', // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
@@ -149,7 +148,7 @@ pages.forEach(function (pathname) {
         // }
     };
     if (pathname in webpackConfig.entry) {
-        conf.favicon = path.resolve(__dirname, 'src/imgs/favicon.ico');
+        conf.favicon = path.resolve(__dirname, '../favicon.ico');
         conf.inject = 'body';
         conf.chunks = ['vendors', pathname];
         conf.hash = true;
@@ -160,10 +159,11 @@ pages.forEach(function (pathname) {
 module.exports = webpackConfig;
 
 function getEntry(globPath, pathDir) {
-    var files = glob.sync(globPath);
-    var entries = {}, entry, dirname, basename, pathname, extname;
+    const files = glob.sync(globPath);
+    const entries = {};
+    let {entry, dirname, basename, pathname, extname} = {};
 
-    for (var i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         entry = files[i];
         dirname = path.dirname(entry);
         extname = path.extname(entry);
@@ -176,4 +176,8 @@ function getEntry(globPath, pathDir) {
         entries[pathname] = ['./' + entry];
     }
     return entries;
+}
+
+function resolve(dir) {
+    return path.join(__dirname, '..', dir);
 }

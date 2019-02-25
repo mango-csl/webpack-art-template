@@ -22,7 +22,7 @@ let webpackConfig = {
     output: {
         // path: join(__dirname, 'dist/static'),
         path: sysConfig.dev.outPutPath,
-        publicPath: sysConfig.dev.publicPath + '/',
+        publicPath: `.${sysConfig.dev.publicPath}/`,
         filename: 'scripts/[name].js',
         chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
     },
