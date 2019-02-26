@@ -43,7 +43,7 @@ app.use('/', routes);
 // 设置代理
 app.use('/dj_server', proxy({
     // target: 'https://api.douban.com/',
-    target: 'http://localhost:3999',
+    target: 'http://192.168.2.167:3999',
     pathRewrite: {'^/dj_server': ''},
     changeOrigin: true
 }));
