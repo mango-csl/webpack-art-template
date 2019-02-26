@@ -28,7 +28,7 @@ new WebpackDevServer(compiler, options).listen(serverPort, sysConfig.dev.host, f
     if (err) {
         console.log(err);
     } else {
-        console.log(`dev server on http://${sysConfig.dev.host}:${serverPort}\n`);
+        console.log(`dev server on http://localhost:${serverPort}\n`);
     }
 });
 
