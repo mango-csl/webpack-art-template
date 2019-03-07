@@ -23,7 +23,6 @@ app.use(cors());
 const {artTemplateOption} = require('./lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
-    //todo 配置项确定
     extname: '.html'
 }));
 
@@ -84,7 +83,7 @@ app.use(function (err, req, res, next) {
 });
 
 const port = process.env.PORT || sysConfig.dev.expressPort;
-app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
+app.use(sysConfig.dev.assetsPublicPath, express.static(sysConfig.build.assetsRoot));
 // app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, function () {
     console.log(`App (production) is now running on port ${port}!`);

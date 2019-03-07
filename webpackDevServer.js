@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./build/webpack.temp.config');
+const config = require('./build/webpack.dev.conf');
 const sysConfig = require('./sysConfig');
 require('shelljs/global');
 
@@ -11,7 +11,8 @@ let serverPort = sysConfig.dev.serverPort || 2082;
 
 const options = {
     publicPath: '/',
-    hot: true,
+    hot: false,
+    inline: false,
     port: serverPort,
     host: sysConfig.dev.host,
     proxy: {

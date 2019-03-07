@@ -30,7 +30,7 @@ let renderData = {
 };
 
 //html模板所在页面
-const tempaltePath = 'dist/' + sysConfig.dev.tplPath + '/';
+const tempaltePath = sysConfig.dev.tplPath + '/';
 const outPutPath = 'dist/';
 // rm('-rf',  path.join(rootPath, outPutPath));
 /**

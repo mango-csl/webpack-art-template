@@ -6,6 +6,7 @@ const glob = require('glob');
 const webpack = require('webpack');
 const sysConfig = require('../sysConfig/index');
 const utils = require('./utils');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
@@ -64,8 +65,13 @@ let webpackConfig = {
                 include: [
                     resolve('src'),
                     // resolve('test'),
+                    resolve('node_modules/webpack-hot-middleware'),
                     resolve('node_modules/webpack-dev-server/client')
-                ]
+                ],
+                query: {
+                    //处理IE8中Object.defineProperty报错的问题
+                    presets: ['es2015-loose']
+                }
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -116,14 +122,21 @@ let webpackConfig = {
                 warnings: false
             },
             except: ['$super', '$', 'exports', 'require'] // 排除关键字
-        })
+        }),
+        // todo 映射static
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../src/static'),
+                to: sysConfig.dev.assetsSubDirectory,
+                ignore: ['.*']
+            }
+        ])
     ]
 };
 const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
 
-//todo webpack/hot/dev-server？
 for (const key of Object.keys(webpackConfig.entry)) {
-    webpackConfig.entry[key].unshift(hotMiddlewareScript);
+    webpackConfig.entry[key].unshift("babel-polyfill", hotMiddlewareScript);
 }
 webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),

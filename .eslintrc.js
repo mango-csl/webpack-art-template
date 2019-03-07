@@ -2,18 +2,9 @@
 // const rules = require('./eslint/rules');
 module.exports = {
   root: true,
-  parser: "babel-eslint",
-  parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module',
-  },
   env: {
     browser: true,
-    // mocha: true,
-    es6: true,
     node: true,
-    amd: true,
-    // jasmine: false
   },
   globals: {
     describe: false,
@@ -28,10 +19,8 @@ module.exports = {
     'eslint:recommended',
     'djcps'
   ],
-  // required to lint *.vue files
   plugins: [
     "html",
-    "import",
     "json",
     "node",
     "promise"
