@@ -10,8 +10,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseWebpackConfig = require('./webpack.base.conf');
 
-const publicPath = `http://192.168.2.167:${sysConfig.dev.port}/`;
-
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
@@ -29,23 +27,52 @@ let webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: [
             // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: [
-                    resolve('src'),
-                    // resolve('test'),
-                    resolve('node_modules/webpack-hot-middleware'),
-                    resolve('node_modules/webpack-dev-server/client')
-                ],
-                query: {
-                    //处理IE8中Object.defineProperty报错的问题
-                    presets: ['es2015-loose']
-                }
-            }
+            // {
+            //     test: /\.js$/,
+            //     loader: 'babel-loader',
+            //     include: [
+            //         resolve('src'),
+            //         // resolve('test'),
+            //         // resolve('node_modules/webpack-hot-middleware'),
+            //         resolve('node_modules/webpack-dev-server/client')
+            //     ],
+            //     query: {
+            //         //处理IE8中Object.defineProperty报错的问题
+            //         presets: ['es2015-loose']
+            //     }
+            // },
+            // {
+            //     test: /\.js$/,
+            //     enforce: "post",
+            //     include: [
+            //         resolve('src'),
+            //         // resolve('test'),
+            //         // resolve('node_modules/webpack-hot-middleware'),
+            //         resolve('node_modules/webpack-dev-server/client')
+            //     ],
+            //     loader: "es3ify-loader"
+            // }
         ]
     },
     plugins: [
+        // new webpack.optimize.UglifyJsPlugin({ // 压缩代码
+        //     output: {
+        //         screw_ie8: false,
+        //         beautify: true, //有正常的空格和断句，注释也会保留，
+        //         comments: true,
+        //         quote_keys: true,
+        //         keep_quoted_props: true
+        //     },
+        //     screw_ie8: false,
+        //     compress: {
+        //         warnings: false, properties: false, screw_ie8: false
+        //     },
+        //     mangle: {
+        //         eval: true,
+        //         screw_ie8: false,
+        //         except: ['$super', '$', 'exports', 'require'] // 排除关键字
+        //     }
+        // }),
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, '../src/static'),
@@ -55,15 +82,32 @@ let webpackConfig = merge(baseWebpackConfig, {
         ])
     ]
 });
-// const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
-const hotMiddlewareScript = 'webpack-dev-server/client?http://localhost:' + sysConfig.dev.serverPort;
-for (const key of Object.keys(webpackConfig.entry)) {
-    webpackConfig.entry[key].unshift("babel-polyfill", hotMiddlewareScript, 'webpack/hot/dev-server');
+
+// for (const key of Object.keys(webpackConfig.entry)) {
+//     webpackConfig.entry[key].unshift("babel-polyfill");
+// }
+if (sysConfig.dev.screw_ie8) {
+    webpackConfig.plugins.push(
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
+    );
 }
-webpackConfig.plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-);
+
+// if (sysConfig.dev.screw_ie8) {
+//     // const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
+//     const hotMiddlewareScript = 'webpack-dev-server/client?http://localhost:' + sysConfig.dev.serverPort;
+//     for (const key of Object.keys(webpackConfig.entry)) {
+//         webpackConfig.entry[key].unshift("babel-polyfill", hotMiddlewareScript, 'webpack/hot/dev-server');
+//     }
+//     webpackConfig.plugins.push(
+//         new webpack.HotModuleReplacementPlugin(),
+//         new webpack.NoEmitOnErrorsPlugin()
+//     );
+// } else {
+//     for (const key of Object.keys(webpackConfig.entry)) {
+//         webpackConfig.entry[key].unshift("babel-polyfill");
+//     }
+// }
 
 const pages = Object.keys(utils.getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {

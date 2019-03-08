@@ -1,7 +1,7 @@
 // 移除node开发环境，webpack警告
 process.noDeprecation = true;
 
-// const path = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const sysConfig = require('../sysConfig');
 const utils = require('./utils');
@@ -10,9 +10,14 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 // const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Es3ifyPlugin = require('es3ify-webpack-plugin');
 
 const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 const chunks = Object.keys(entries);
+
+function resolve(dir) {
+    return path.join(__dirname, '..', dir);
+}
 
 let webpackConfig = {
     entry: entries,
@@ -25,6 +30,38 @@ let webpackConfig = {
     },
     module: {
         rules: [
+            // {
+            //     test: /\.js$/,
+            //     loader: 'babel-loader',
+            //     // include: [
+            //     //     resolve('src'),
+            //     //     // resolve('test'),
+            //     //     // resolve('node_modules/webpack-hot-middleware'),
+            //     //     resolve('node_modules/webpack-dev-server/client')
+            //     // ],
+            //     exclude: /(node_modules)/,
+            //     query: {
+            //         //处理IE8中Object.defineProperty报错的问题
+            //         presets: ['es2015-loose']
+            //     }
+            // },
+            {
+                test: /\.(js|jsx|ejs|tpl)$/,
+                exclude: /(node_modules)/,
+                //include: path.join(projectDirname, 'src'),
+                //loaders: ['babel?optional=runtime']
+                use: {
+                    loader: 'babel-loader',
+                    /*options: {
+                        presets: ['env']
+                    }*/
+                    options: {
+                        presets: ['env', 'es2015-loose']
+                        //presets: ['env'],
+                        //plugins: ['transform-runtime', 'proxy']
+                    }
+                }
+            },
             // ...utils.styleLoaders({sourceMap: sysConfig.dev.cssSourceMap, usePostCSS: true}),
             {
                 test: /\.css$/,
@@ -96,6 +133,7 @@ let webpackConfig = {
         ]
     },
     plugins: [
+        new Es3ifyPlugin(),
         new CleanWebpackPlugin(['dist']),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'

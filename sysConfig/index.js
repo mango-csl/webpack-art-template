@@ -18,7 +18,8 @@ module.exports = {
         assetsPublicPath: '/', // 'https://cdn.xxxxx.com', // 添加路径前缀,后续cdn扩展
         assetsSubDirectory: 'static', //静态资源指向目录
         // publicPath: '/static',
-        tplPath: 'temp_views'
+        tplPath: 'temp_views',
+        screw_ie8: false
         // outPutPath: path.join(__dirname, '../dist/static')
     },
 
@@ -33,6 +34,7 @@ module.exports = {
         // publicPath: '/static',
         // outPutPath: path.join(__dirname, '../dist/static'),
         tplPath: 'temp_views',
-        productionSourceMap: false
+        productionSourceMap: false,
+        screw_ie8: false
     }
 };
