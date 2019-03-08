@@ -11,8 +11,8 @@ let serverPort = sysConfig.dev.serverPort || 2082;
 
 const options = {
     publicPath: '/',
-    hot: false,
-    inline: false,
+    hot: sysConfig.dev.screw_ie8,
+    inline: sysConfig.dev.screw_ie8,
     port: serverPort,
     host: sysConfig.dev.host,
     proxy: {

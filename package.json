@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node expressServer\" \"node webpackDevServer\"",
+    "start": "concurrently \"node webpackDevServer\" \"node expressServer\"",
     "build:webpack": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress --hide-modules",
     "node:compile": "node build/compile_node/compile-art-template",
     "build": "npm run build:webpack&&npm run node:compile"
@@ -17,11 +17,13 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "es5-shim": "^4.5.9",
+    "es6-promise": "^4.1.0",
     "express": "^4.16.4",
     "http-errors": "~1.6.2",
     "http-proxy": "^1.17.0",
     "morgan": "^1.9.1",
-    "webpack-hot-middleware-ie8": "^2.13.5"
+    "requirejs": "^2.3.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -40,6 +42,7 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.23.1",
     "es3ify-loader": "^0.2.0",
+    "es3ify-webpack-plugin": "^0.1.0",
     "eslint": "^4.2.0",
     "eslint-config-djcps": "^0.0.4",
     "eslint-loader": "^1.9.0",
@@ -54,7 +57,7 @@
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.29.0",
     "http-proxy-middleware": "^0.19.1",
-    "jquery": "^3.3.1",
+    "jquery": "^1.12.4",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "resolve-url-loader": "^3.0.1",

@@ -2,8 +2,8 @@
 var path = require('path');
 var glob = require('glob');
 
-exports.getEntry = function (globPath, pathDir,options) {
-    var files = glob.sync(globPath,options);
+exports.getEntry = function (globPath, pathDir, options) {
+    var files = glob.sync(globPath, options);
     var entries = {}, entry, dirname, basename, pathname, extname;
 
     for (var i = 0; i < files.length; i++) {

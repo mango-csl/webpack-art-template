@@ -32,37 +32,43 @@ let webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: [
             // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
-            {
-                test: /\.js$/,
-                use: [
-                    {
-                        loader: 'babel-loader'
-                    },
-                    {
-                        loader: 'es3ify-loader'
-                    }
-                ],
-                //resolve('node_modules/djcpsweb')
-                // include: [
-                //     resolve('src'),
-                //     resolve('node_modules/webpack-build-server/client')
-                // ]
-            }
+            // {
+            //     test: /\.js$/,
+            //     exclude: /node_modules/,
+            //     use: [
+            //         {
+            //             loader: 'babel-loader'
+            //         },
+            //         {
+            //             loader: 'es3ify-loader'
+            //         }
+            //     ]
+            //     //resolve('node_modules/djcpsweb')
+            //     // include: [
+            //     //     resolve('src'),
+            //     //     resolve('node_modules/webpack-build-server/client')
+            //     // ]
+            // }
         ]
     },
     plugins: [
-        new UglifyJsPlugin({ // 压缩代码
-            output: {
-                beautify: true,//有正常的空格和断句，注释也会保留，
-                comments: true,
-                keep_quoted_props: true
-            },
-            screw_ie8: false,
-            compress: {
-                warnings: false, properties: false
-            },
-            except: ['$super', '$', 'exports', 'require'] // 排除关键字
-        }),
+        // new UglifyJsPlugin({ // 压缩代码
+        //     output: {
+        //         screw_ie8: false,
+        //         beautify: true, //有正常的空格和断句，注释也会保留，
+        //         comments: true,
+        //         keep_quoted_props: true
+        //     },
+        //     screw_ie8: false,
+        //     compress: {
+        //         warnings: false, properties: false,screw_ie8: false
+        //     },
+        //     mangle: {
+        //         screw_ie8: false,
+        //         except: ['$']
+        //     },
+        //     except: ['$super', '$', 'exports', 'require'] // 排除关键字
+        // }),
         // new UglifyJSPlugin({
         //     compress: {screw_ie8: false},
         //     output: {screw_ie8: false},
@@ -72,6 +78,26 @@ let webpackConfig = merge(baseWebpackConfig, {
         //     },
         //     support_ie8: true
         // })
+        new webpack.optimize.UglifyJsPlugin({ // 压缩代码
+            output: {
+                // screw_ie8: false,
+                beautify: true, //有正常的空格和断句，注释也会保留，
+                comments: true,
+                quote_keys: true, //SCRIPT1048: 缺少标识符
+                keep_quoted_props: true // 是否保留对象字面量中的引号。
+            },
+            // screw_ie8: false,
+            compress: {
+                // screw_ie8: false,
+                warnings: false,
+                properties: false
+            },
+            mangle: {
+                eval: true,
+                screw_ie8: false, //是否把支持IE8的代码clear掉
+                except: ['$super', '$', 'exports', 'require'] // 排除关键字
+            }
+        }),
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, '../src/static'),

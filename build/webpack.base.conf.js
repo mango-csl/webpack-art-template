@@ -1,18 +1,27 @@
 // 移除node开发环境，webpack警告
 process.noDeprecation = true;
 
-// const path = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const sysConfig = require('../sysConfig');
 const utils = require('./utils');
 
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-// const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Es3ifyPlugin = require('es3ify-webpack-plugin');
+const files = require('./base/files');
 
+// const entries = merge(utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/'), {
+//     'Main': [path.resolve(files.appPath, 'utils/index.js')]
+// });
 const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 const chunks = Object.keys(entries);
+
+// function resolve(dir) {
+//     return path.join(__dirname, '..', dir);
+// }
 
 let webpackConfig = {
     entry: entries,
@@ -25,7 +34,23 @@ let webpackConfig = {
     },
     module: {
         rules: [
-            // ...utils.styleLoaders({sourceMap: sysConfig.dev.cssSourceMap, usePostCSS: true}),
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                //include: path.join(projectDirname, 'src'),
+                include: [files.staticPath],
+                use: {
+                    loader: 'babel-loader',
+                    /*options: {
+                        presets: ['env']
+                    }*/
+                    options: {
+                        presets: ['env', 'es2015-loose']
+                        //presets: ['env'],
+                        //plugins: ['transform-runtime', 'proxy']
+                    }
+                }
+            },
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
@@ -36,6 +61,7 @@ let webpackConfig = {
                     loader: "style-loader"
                 }, {
                     loader: "css-loader", options: {
+                        // todo dev true ?pro false?
                         sourceMap: true
                     }
                 }, {
@@ -53,17 +79,6 @@ let webpackConfig = {
                     }
                 }]
             },
-            // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
-            // {
-            //     test: /\.js$/,
-            //     loader: 'babel-loader',
-            //     //resolve('node_modules/djcpsweb')
-            //     include: [
-            //         resolve('src'),
-            //         resolve('test'),
-            //         resolve('node_modules/webpack-dev-server/client')
-            //     ]
-            // },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
@@ -88,14 +103,10 @@ let webpackConfig = {
                     name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
                 }
             }
-            // ,
-            // {
-            //     test: /.art$/,
-            //     use: ['art-template-loader']
-            // }
         ]
     },
     plugins: [
+        new Es3ifyPlugin(),
         new CleanWebpackPlugin(['dist']),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'
