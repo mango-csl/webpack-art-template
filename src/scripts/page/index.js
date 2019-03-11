@@ -4,7 +4,7 @@ require('../../styles/common/global.css');
 require('../../styles/common/grid.css');
 require('../../styles/common/common.less');
 require('../../styles/page/index.less');
-
+// require('requirejs/require.js');
 var oP = document.createElement('p');
 oP.className = 'text';
 oP.innerHTML = '这是由js生成的一句话。';
