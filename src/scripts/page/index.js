@@ -4,7 +4,7 @@ require('../../styles/common/global.css');
 require('../../styles/common/grid.css');
 require('../../styles/common/common.less');
 require('../../styles/page/index.less');
-// require('requirejs/require.js');
+
 var oP = document.createElement('p');
 oP.className = 'text';
 oP.innerHTML = '这是由js生成的一句话。';
@@ -12,22 +12,11 @@ document.querySelector('.g-bd').appendChild(oP);
 
 /* eslint-disable no-undef */
 // 增加事件
-
 $('#dialog').click(function () {
-    // require(['../components/dialog/index.js'], function (dialog) {
-    //     dialog();
-    // });
-    require(['./dialog/index.js'], function (dialog) {
+    require(['../components/dialog/index.js'], function (dialog) {
         dialog();
     });
-    // require(['./temp.js'], function (dialog) {
-    //     dialog();
-    // });
 });
-// require.ensure([], function (require) {
-//     var dialog = require('../components/dialog/index.js');
-//     dialog();
-// });
 $('#http').click(function () {
     getTest();
     // ajax('https://api.douban.com/v2/music/search?q=周杰伦');

@@ -9,57 +9,14 @@ const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseWebpackConfig = require('./webpack.base.conf');
-const files = require('./base/files');
-
-function resolve(dir) {
-    return path.join(__dirname, '..', dir);
-}
 
 let webpackConfig = merge(baseWebpackConfig, {
-    // output: {
-    //     // path: sysConfig.dev.outPutPath,
-    //     path: '/',
-    //     publicPath: '/',
-    //     filename: 'scripts/[name].js',
-    //     chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
-    // },
     //ps：inline-source-map 其他方式（cheap-module-eval-source-map）压缩会导致开发环境在ie8下，编译异常   取消标识符，坑爹：注意webpack重启才能检验，忘记已经去除ie8 热更新了
     devtool: 'inline-source-map',
     module: {
-        rules: [
-            // {
-            //     test: /\.js$/,
-            //     enforce: "post",
-            //     // enforce: "pre",
-            //     include: [
-            //         resolve('src'),
-            //         // resolve('test'),
-            //         // resolve('node_modules/webpack-hot-middleware'),
-            //         resolve('node_modules/webpack-dev-server/client')
-            //     ],
-            //     loader: "es3ify-loader"
-            // }
-        ]
+        rules: []
     },
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin({ // 压缩代码
-        //     output: {
-        //         screw_ie8: false,
-        //         beautify: true, //有正常的空格和断句，注释也会保留，
-        //         comments: true,
-        //         quote_keys: true,
-        //         keep_quoted_props: true
-        //     },
-        //     screw_ie8: false,
-        //     compress: {
-        //         warnings: false, properties: false, screw_ie8: false
-        //     },
-        //     mangle: {
-        //         eval: true,
-        //         screw_ie8: false,
-        //         except: ['$super', '$', 'exports', 'require'] // 排除关键字
-        //     }
-        // }),
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, '../src/static'),
@@ -71,7 +28,7 @@ let webpackConfig = merge(baseWebpackConfig, {
 });
 
 // for (const key of Object.keys(webpackConfig.entry)) {
-//     webpackConfig.entry[key].unshift("babel-polyfill");
+//     webpackConfig.entry[key].unshift("babel-polyfill");// 限制项目使用新语法，基础的兼容问题，采用meta注入js解决
 // }
 if (sysConfig.dev.screw_ie8) {
     webpackConfig.plugins.push(

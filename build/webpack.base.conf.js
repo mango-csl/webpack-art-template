@@ -6,9 +6,8 @@ const webpack = require('webpack');
 const sysConfig = require('../sysConfig');
 const utils = require('./utils');
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-const merge = require('webpack-merge');
+// const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Es3ifyPlugin = require('es3ify-webpack-plugin');
 const files = require('./base/files');
@@ -107,7 +106,6 @@ let webpackConfig = {
     },
     plugins: [
         new Es3ifyPlugin(),
-        new CleanWebpackPlugin(['dist']),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'
         }),
