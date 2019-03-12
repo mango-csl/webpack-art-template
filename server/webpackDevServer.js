@@ -1,9 +1,13 @@
+/**
+ * 开发运行环境，除了view/*.html的文件改动需要手动刷新，其他的src/* 的修改支持热更新
+ */
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./build/webpack.dev.conf');
-const sysConfig = require('./sysConfig');
+const config = require('../build/webpack.dev.conf');
+const files = require('../sysConfig/files');
+const sysConfig = require('../sysConfig/index');
 require('shelljs/global');
 
 let expressPort = sysConfig.dev.expressPort || 24999;
@@ -33,7 +37,7 @@ new WebpackDevServer(compiler, options).listen(serverPort, sysConfig.dev.host, f
     }
 });
 
-const viewPath = path.join(__dirname, sysConfig.dev.tplPath);
+const viewPath = files.tplPath;
 rm('-rf', viewPath);
 // // 在源码有更新时，更新模板
 compiler.plugin('emit', function (compilation, cb) {
@@ -53,15 +57,3 @@ compiler.plugin('emit', function (compilation, cb) {
     }
     cb();
 });
-//
-// // 当页面模板有改变时，强制刷新页面
-// compiler.plugin('compilation', function (compilation) {
-//     compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-//         // todo 刷新浏览器
-//         /**
-//          * 实际项目中，应该使用webpack-dev-middleware和webpack-hot-middleware中间件，
-//          * 结合node库express/koa等使用。
-//          */
-//         cb();
-//     });
-// });

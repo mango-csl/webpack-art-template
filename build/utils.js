@@ -92,8 +92,9 @@ exports.styleLoaders = function (options) {
  * 遍历项目文件，获取入口js，用于生成多页入口
  * @param globPath
  * @param pathDir
+ * @param formatFn 自定义内容格式
  */
-exports.getEntry = function (globPath, pathDir) {
+exports.getEntry = function (globPath, pathDir, formatFn) {
     const files = glob.sync(globPath);
     const entries = {};
     let {entry, dirname, basename, pathname, extname} = {};
@@ -108,7 +109,7 @@ exports.getEntry = function (globPath, pathDir) {
         if (pathname.startsWith(pathDir)) {
             pathname = pathname.substring(pathDir.length);
         }
-        entries[pathname] = ['./' + entry];
+        entries[pathname] = formatFn ? formatFn(entry) : ['./' + entry];
     }
     return entries;
 };
