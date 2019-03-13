@@ -1,8 +1,11 @@
 .v-dialog{
+	behavior: url(/static/PIE.htc);
 	position: fixed;
 	display: none;
 	left: 0;top:0;right:0;bottom:0;
-	background-color: rgba(0,0,0,.5);
+	background: rgba(0,0,0,.5);
+	-pie-background: rgba(249, 86, 48, 0.5);
+	user-select: none;
 }
 .v-dialog .close{
 	position: absolute;
@@ -15,8 +18,10 @@
 	line-height: 40px;
 	font-size: 40px;
 	color:#666;
-	background-color: rgba(255,255,255,.8);
+	background: rgba(255,255,255,.8);
+	-pie-background: rgba(61, 87, 255, 0.8);
 	cursor: pointer;
+	behavior: url(/static/PIE.htc);
 }
 .v-dialog .img{
 	position: absolute;

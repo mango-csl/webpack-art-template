@@ -1,15 +1,12 @@
+// todo 首屏加载优化，先渲染主框架
 // 引入css
-require('../../styles/lib/reset.css');
-require('../../styles/common/global.css');
-require('../../styles/common/grid.css');
-require('../../styles/common/common.less');
+require('../../styles/base/index.less');
 require('../../styles/page/index.less');
 
 var oP = document.createElement('p');
 oP.className = 'text';
-oP.innerHTML = '这是由js生成的一句话。';
+oP.innerHTML = '这是由js生成的一句话';
 document.querySelector('.g-bd').appendChild(oP);
-
 /* eslint-disable no-undef */
 // 增加事件
 $('#dialog').click(function () {

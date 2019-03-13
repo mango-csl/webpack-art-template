@@ -1,0 +1,87 @@
+<link rel="stylesheet" id="formCss" href="/static/components/modules/djcpsForm/djcpsForm.css">
+<script id="formTpl" type="text/html">
+    <form class="layui-form {{d.pane?'layui-form-pane':''}}" action="" lay-filter="{{d.layFilter}}">
+    {{#  layui.each(d.data, function(index, item){ }}
+    {{# if(item.type == 'text' || item.type == 'password'){ }}
+    <div class="layui-form-item {{item.name}}">
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            <input type="{{item.type}}" name="{{item.name}}"
+                    lay-verify="{{item.layVerify.name?item.layVerify.name:''}}"
+                    autocomplete="{{item.options.autocomplete?'on':'off'}}"
+                    placeholder="{{item.options.placeholder}}" class="layui-input" {{item.options.disabled?'disabled':''}}
+                    {{item.options.readonly?'readonly':''}}>
+        </div>
+    </div>
+    {{#  }else if(item.type == 'select'){ }}
+    <div class="layui-form-item {{item.name}}">
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            <select name="{{item.name}}" lay-verify="{{item.layVerify.name?item.layVerify.name:''}}"  {{item.options.laySearch?'lay-search':''}} {{item.options.disabled?'disabled':''}}>
+                {{#  layui.each(item.options.data, function(index, option){ }}
+                    {{# if(!isNaN(index)) { }}
+                        <option value="{{option.value}}" {{option.disabled?'disabled':''}} {{option.checked?'selected':''}} >{{option.title}}</option>
+                    {{# } else { }}
+                        <optgroup label="{{index}}">
+                    {{# layui.each(option, function(groupIndex, groupOption){ }}
+                            <option value="{{groupOption.value}}" {{groupOption.disabled?'disabled':''}} {{groupOption.checked?'selected':''}} >{{groupOption.title}}</option>
+                    {{# }); }}
+                        </optgroup>
+                    {{# } }}
+                {{# });}}
+            </select>
+        </div>
+    </div>
+    {{#  }else if(item.type == 'checkbox'){ }}
+    <div class="layui-form-item {{item.name}}" {{d.pane?'pane':''}}>
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            {{#  layui.each(item.options.data, function(index, option){ }}
+                <input type="checkbox" name="{{item.name+index}}"
+                        title="{{option.title}}" value="{{option.value}}"
+                        lay-skin="{{option.laySkin}}" lay-text="{{option.layText}}"
+                        {{option.disabled?'disabled':''}} {{option.checked?'checked':''}} >
+            {{# });}}
+        </div>
+    </div>
+    {{# }else if(item.type == 'radio'){  }}
+    <div class="layui-form-item {{item.name}}" {{d.pane?'pane':''}}>
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            {{#  layui.each(item.options.data, function(index, option){ }}
+                <input type="radio" name="{{item.name}}" value="{{option.value}}"
+                        title="{{option.title}}" {{option.disabled?'disabled':''}}
+                        {{option.checked?'checked':''}} >
+            {{# });}}
+        </div>
+    </div>
+    {{# }else if(item.type == 'textarea'){   }}
+    <div class="layui-form-item {{item.name}}">
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            <textarea placeholder="{{item.options.placeholder}}" name="{{item.name}}"
+                        class="layui-textarea" lay-verify="{{item.layVerify.name?item.layVerify.name:''}}"
+                        {{item.options.disabled?'disabled':''}} {{item.options.readonly?'readonly':''}} ></textarea>
+        </div>
+    </div>
+    {{# } else if(item.type == 'date'){ }}
+    <div class="layui-form-item {{item.name}}">
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block"></div>
+    </div>
+    {{# } else if(item.type == 'upload'){ }}
+    <div class="layui-form-item {{item.name}}">
+        <label class="layui-form-label">{{item.label}}</label>
+        <div class="layui-input-block">
+            <input type="text" class="uploadContent">
+            {{item.customHtml}}
+        </div>
+    </div>
+    {{# } else if(item.type == 'custom'){ }}
+    <div class="layui-form-item {{item.name}}">
+        {{item.customHtml}}
+    </div>
+    {{# } }}
+    {{#  }); }}
+    </form>
+</script>

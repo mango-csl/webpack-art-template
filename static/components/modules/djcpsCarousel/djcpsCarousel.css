@@ -1,0 +1,23 @@
+.layui-carousel img {
+    width: 100%;
+    height: 100%;
+}
+
+.layui-carousel .carouseText p {
+    text-align: center;
+    line-height: 400px;
+    font-size: 48px;
+}
+
+.layui-carousel .carouseAll {
+    position: relative;
+}
+
+.layui-carousel .carouseAll p {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    font-size: 48px;
+    width: 100%;
+    text-align: center;
+}

@@ -5,17 +5,5 @@
 <meta name="renderer" content="webkit">
 <meta name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-
-<link rel="stylesheet" href="/static/css/normalize.css">
-
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>-->
-<script src="/static/js/es6-promise.auto.min.js"></script>
-
-<!--[if lt IE 9]>
-<script src="/static/js/es5_shim_v2.2.0.js"></script>
-<script src="/static/js/es5-sham_v2.2.0.js"></script>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
-<![endif]-->
-
-<!--[if IE 8]><script src="/static/js/ie8_0.8.0.js"></script><![endif]-->
+{{include './module/link_css'}}
+{{include './module/ie_depend'}}

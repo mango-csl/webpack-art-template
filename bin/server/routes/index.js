@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const renderData = require('../../dataSource/renderData');
 
-const webTile = '坑爹的API';
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index.html', {
-        title: '首页 - ' + webTile,
-        pageNav: 'index'
-    });
-});
+const homePage = 'index';
 
-router.get('/about.html', function (req, res, next) {
-    res.render('about.html', {
-        title: '关于 - ' + webTile,
-        pageNav: 'about'
+for (let key of Object.keys(renderData)) {
+    let path = key === homePage ? '/' : '/' + key + '.html';
+    router.get(path, function (req, res) {
+        res.render(`${key}.html`, renderData[key]);
+        // next();
     });
-});
+}
 
 module.exports = router;

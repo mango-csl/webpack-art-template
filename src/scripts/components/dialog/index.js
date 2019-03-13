@@ -7,11 +7,11 @@ var html = require('./tmpl/dialog.html');
 module.exports = function () {
     var $dialog = $(html).clone();
     $dialog.find('.close').on('click', function () {
+        // todo fadeOut第一次失效？？？
         $dialog.fadeOut(function () {
             $(this).remove();
         });
     });
     $('body').append($dialog);
     $dialog.fadeIn();
-    console.log('123124');
 };

@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {{include './common/meta'}}
+	{{include './common/meta'}}
 </head>
 <body>
-{{include './common/header'}}
-<div class="g-bd">
-    <input id="dialog" type="button" value="弹窗" class="btn">
-    <input id="http" type="button" value="httpTest" class="btn">
-    <p class="img">
-        <img src="../imgs/4.png" alt="">
-    </p>
-    {{include './common/_content'}}
-</div>
-{{include './common/footer'}}
+	{{include './common/header'}}
+	<div class="g-bd">
+		<input type="button" value="弹窗" class="btn" id="dialog">
+		<p class="img">
+			<img src="../imgs/4.png" alt="">
+		</p>
+		{{include './common/_content'}}
+	</div>
+	{{include './common/footer'}}
 </body>
 </html>

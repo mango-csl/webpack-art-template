@@ -20,7 +20,7 @@ const app = express();
 app.use(cors());
 
 // view engine setup
-const {artTemplateOption} = require('../build/lib/art-template.js');
+const {artTemplateOption} = require('../lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
     extname: '.html'

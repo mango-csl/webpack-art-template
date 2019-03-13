@@ -4,3 +4,4 @@ package-lock.json
 temp_views
 dist
 /bin/config/dev.config.js
+/test/temp/

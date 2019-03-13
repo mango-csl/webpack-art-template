@@ -1,0 +1,86 @@
+/* 表单基础样式 */
+
+/* 表单主色调替换 */
+
+.layui-form-select dl dd.layui-this {
+    background-color: #1886E3;
+}
+
+.layui-form-radio:hover i, .layui-form-radioed i {
+    color: #1886E3;
+}
+
+.layui-btn {
+    background-color: #1886E3;
+}
+
+.layui-form-checked span, .layui-form-checked:hover span {
+    background-color: #1886E3;
+}
+
+.layui-form-checked i {
+    color: #1886E3;
+}
+
+.layui-form-checked[lay-skin=primary] span, .layui-form-checkbox[lay-skin=primary]:hover span {
+    background-color: #fff;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+    border-color: #1886E3;
+    background-color: #1886E3;
+    color: #fff;
+}
+
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #1886E3;
+}
+
+.layui-form-onswitch {
+    border-color: #1886E3;
+    background-color: #1886E3;
+}
+
+/* checkbox禁用样式统一 */
+
+.layui-checkbox-disbaled.layui-form-checked span, .layui-checkbox-disbaled.layui-form-checked:hover span {
+    background-color: #1886E3!important;
+}
+
+.layui-checkbox-disbaled.layui-form-checked i, .layui-checkbox-disbaled.layui-form-checked:hover i {
+    color: #1886E3!important;
+}
+
+.layui-checkbox-disbaled.layui-form-checked[lay-skin=primary] span, .layui-checkbox-disbaled.layui-form-checked[lay-skin=primary]:hover span {
+    background-color: transparent!important;
+}
+
+.layui-checkbox-disbaled.layui-form-checked[lay-skin=primary] i, .layui-checkbox-disbaled.layui-form-checked[lay-skin=primary]:hover i {
+    color: #fff!important;
+    border-color: #1886E3!important;
+}
+
+.layui-checkbox-disbaled.layui-form-onswitch {
+    border-color: #1886E3!important;
+}
+
+/* 表单校验提示相关 */
+
+.layui-form-danger, .layui-form-danger:hover {
+    border-color: #FF5722!important;
+}
+
+/* 用于表单校验的上传input框隐藏 */
+
+.uploadContent {
+    width: 0;
+    border: 0;
+    height: 0;
+}
+
+/* 其他表单基础样式 */
+
+.layui-input, .layui-textarea {
+    outline: none;
+    resize: none;
+}

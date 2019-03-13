@@ -1,10 +1,9 @@
 <div class="g-hd">
-	<ul class="m-nav">
-		<li>
-			<a {{if pageNav=='index'}}class="cur"{{/if}} href="/">首页</a>
-		</li>
-		<li>
-			<a {{if pageNav=='about'}}class="cur"{{/if}} href="/about.html">关于</a>
-		</li>
-	</ul>
+    <ul class="m-nav">
+        {{each headerList value key}}
+        <li>
+        <a {{if pageNav==key}}class="cur"{{/if}} {{if key =='index'}}href="/"{{else}}href="/{{key}}.html"{{/if}}>{{value}}</a>
+        </li>
+        {{/each}}
+    </ul>
 </div>
