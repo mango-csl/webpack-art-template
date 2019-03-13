@@ -1,7 +1,8 @@
 'use strict';
 const path = require('path');
-const config = require('../sysConfig');
+const config = require('../config/index');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const glob = require('glob');
 // const packageConfig = require('../package.json');
 
 /**
@@ -50,10 +51,10 @@ exports.cssLoaders = function (options) {
         // Extract CSS when that option is specified
         // (which is the case during production build)
         // if (options.extract) {
-            return ExtractTextPlugin.extract({
-                use: loaders
-                // fallback: 'vue-style-loader'
-            });
+        return ExtractTextPlugin.extract({
+            use: loaders
+            // fallback: 'vue-style-loader'
+        });
         // } else {
         //     return ['vue-style-loader'].concat(loaders);
         // }
@@ -63,7 +64,7 @@ exports.cssLoaders = function (options) {
     return {
         css: generateLoaders(),
         // postcss: generateLoaders(),
-        less: generateLoaders('less'),
+        less: generateLoaders('less')
         // sass: generateLoaders('sass', {indentedSyntax: true}),
         // scss: generateLoaders('sass'),
         // stylus: generateLoaders('stylus'),
@@ -85,4 +86,30 @@ exports.styleLoaders = function (options) {
     }
 
     return output;
+};
+
+/**
+ * 遍历项目文件，获取入口js，用于生成多页入口
+ * @param globPath
+ * @param pathDir
+ * @param formatFn 自定义内容格式
+ */
+exports.getEntry = function (globPath, pathDir, formatFn) {
+    const files = glob.sync(globPath);
+    const entries = {};
+    let {entry, dirname, basename, pathname, extname} = {};
+
+    for (let i = 0; i < files.length; i++) {
+        entry = files[i];
+        dirname = path.dirname(entry);
+        extname = path.extname(entry);
+        basename = path.basename(entry, extname);
+        pathname = path.normalize(path.join(dirname, basename));
+        pathDir = path.normalize(pathDir);
+        if (pathname.startsWith(pathDir)) {
+            pathname = pathname.substring(pathDir.length);
+        }
+        entries[pathname] = formatFn ? formatFn(entry) : ['./' + entry];
+    }
+    return entries;
 };

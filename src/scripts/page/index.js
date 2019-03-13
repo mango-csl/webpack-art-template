@@ -22,6 +22,7 @@ $('#http').click(function () {
     // ajax('https://api.douban.com/v2/music/search?q=周杰伦');
 });
 getTest();
+
 function getTest() {
     $.ajax({
         type: "post",

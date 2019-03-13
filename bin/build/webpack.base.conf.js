@@ -2,33 +2,47 @@
 process.noDeprecation = true;
 
 const path = require('path');
-const glob = require('glob');
 const webpack = require('webpack');
-const sysConfig = require('./sysConfig');
-const utils = require('./build/utils');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const sysConfig = require('../config/index');
+const utils = require('./utils');
+
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+// const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-const debug = process.env.NODE_ENV !== 'production';
-
-const entries = getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
+const Es3ifyPlugin = require('es3ify-webpack-plugin');
+const files = require('../config/files');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 const chunks = Object.keys(entries);
 
 let webpackConfig = {
     entry: entries,
     output: {
-        // path: join(__dirname, 'dist/static'),
-        path: sysConfig.dev.outPutPath,
-        publicPath: `.${sysConfig.dev.publicPath}/`,
-        filename: 'scripts/[name].js',
-        chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
+        path: files.buildPath,
+        filename: '[name].js',
+        publicPath: process.env.NODE_ENV === 'production'
+            ? sysConfig.build.assetsPublicPath
+            : sysConfig.dev.assetsPublicPath
     },
     module: {
         rules: [
-            // ...utils.styleLoaders({sourceMap: sysConfig.dev.cssSourceMap, usePostCSS: true}),
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                //include: path.join(projectDirname, 'src'),
+                include: [files.staticPath],
+                use: {
+                    loader: 'babel-loader',
+                    /*options: {
+                        presets: ['env']
+                    }*/
+                    options: {
+                        presets: ['env', 'es2015-loose']
+                        //presets: ['env'],
+                        //plugins: ['transform-runtime', 'proxy']
+                    }
+                }
+            },
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
@@ -39,6 +53,7 @@ let webpackConfig = {
                     loader: "style-loader"
                 }, {
                     loader: "css-loader", options: {
+                        // todo dev true ?pro false?
                         sourceMap: true
                     }
                 }, {
@@ -56,24 +71,12 @@ let webpackConfig = {
                     }
                 }]
             },
-            // js babel编译，团购项目需要支持ie8，所以暂时不用Babel编译
-            // {
-            //     test: /\.js$/,
-            //     loader: 'babel-loader',
-            //     //resolve('node_modules/djcpsweb')
-            //     include: [
-            //         resolve('src'),
-            //         resolve('test'),
-            //         resolve('node_modules/webpack-dev-server/client')
-            //     ]
-            // },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]'),
-                    publicPath: '../'
+                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
                 }
             },
             {
@@ -92,15 +95,10 @@ let webpackConfig = {
                     name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
                 }
             }
-            // ,
-            // {
-            //     test: /.art$/,
-            //     use: ['art-template-loader']
-            // }
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
+        new Es3ifyPlugin(),
         new webpack.ProvidePlugin({ // 加载jq
             $: 'jquery'
         }),
@@ -109,21 +107,16 @@ let webpackConfig = {
             chunks: chunks,
             minChunks: chunks.length // 提取所有entry共同依赖的模块
         }),
-        new ExtractTextPlugin('styles/[name].css'), // 单独使用link标签加载css并设置路径，相对于output配置中的publickPath
-        debug ? function () {
-        } : new UglifyJsPlugin({ // 压缩代码
-            compress: {
-                warnings: false
-            },
-            except: ['$super', '$', 'exports', 'require'] // 排除关键字
-        })
+        new ExtractTextPlugin('styles/[name].css') // 单独使用link标签加载css并设置路径，相对于output配置中的publickPath
+
     ]
 };
 
-const pages = Object.keys(getEntry('src/views/**/*.html', 'src/views/'));
+const pages = Object.keys(utils.getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {
+    pathname.replace('');
     const conf = {
-        filename: '../' + sysConfig.dev.tplPath + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
+        filename: '../' + files.tplName + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
         template: 'src/views/' + pathname + '.html', // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
         /*
@@ -138,7 +131,7 @@ pages.forEach(function (pathname) {
         // }
     };
     if (pathname in webpackConfig.entry) {
-        conf.favicon = path.resolve(__dirname, 'src/imgs/favicon.ico');
+        conf.favicon = files.faviconPath;
         conf.inject = 'body';
         conf.chunks = ['vendors', pathname];
         conf.hash = true;
@@ -147,23 +140,3 @@ pages.forEach(function (pathname) {
 });
 
 module.exports = webpackConfig;
-
-function getEntry(globPath, pathDir) {
-    const files = glob.sync(globPath);
-    const entries = {};
-    let {entry, dirname, basename, pathname, extname} = {};
-
-    for (let i = 0; i < files.length; i++) {
-        entry = files[i];
-        dirname = path.dirname(entry);
-        extname = path.extname(entry);
-        basename = path.basename(entry, extname);
-        pathname = path.normalize(path.join(dirname, basename));
-        pathDir = path.normalize(pathDir);
-        if (pathname.startsWith(pathDir)) {
-            pathname = pathname.substring(pathDir.length);
-        }
-        entries[pathname] = ['./' + entry];
-    }
-    return entries;
-}

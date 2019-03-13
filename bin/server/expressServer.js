@@ -1,12 +1,12 @@
 const express = require('express');
 // const fs = require('fs');
 // require('shelljs/global');
-const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const merge = require('webpack-merge');
-const sysConfig = require('./sysConfig');
+const sysConfig = require('../config/index');
+const files = require('../config/files');
 const routes = require('./routes/index');
 
 // 代理插件
@@ -20,14 +20,13 @@ const app = express();
 app.use(cors());
 
 // view engine setup
-const {artTemplateOption} = require('./lib/art-template.js');
+const {artTemplateOption} = require('../build/lib/art-template.js');
 app.engine('.html', require('express-art-template'));
 app.set('view options', merge(artTemplateOption, {
-    //todo 配置项确定
     extname: '.html'
 }));
 
-app.set('views', path.join(__dirname, sysConfig.dev.tplPath));
+app.set('views', files.tplPath);
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
@@ -84,7 +83,7 @@ app.use(function (err, req, res, next) {
 });
 
 const port = process.env.PORT || sysConfig.dev.expressPort;
-app.use(sysConfig.dev.publicPath, express.static(sysConfig.dev.outPutPath));
+app.use(sysConfig.dev.assetsPublicPath, express.static(files.buildPath));
 // app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, function () {
     console.log(`App (production) is now running on port ${port}!`);

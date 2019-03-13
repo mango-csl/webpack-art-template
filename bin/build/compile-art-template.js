@@ -1,25 +1,20 @@
-// const artTemplate = require('art-template')
-const path = require('path');
-const {artTemplateRenderFn} = require('../../lib/art-template');
+const {artTemplateRenderFn} = require('./lib/art-template');
 const fs = require('fs');
-const common = require('../common');
-const rootPath = path.join(__dirname, '../../');
-const glob = require('glob');
-var sysConfig = require('../../sysConfig');
-
+const utils = require('./utils');
+const files = require('../config/files');
 require('shelljs/global');
 
 const webTile = '各个页面统一title';
 let renderData = {
-    'index.html': {
+    'index': {
         title: '首页 - ' + webTile,
         pageNav: 'index'
     },
-    'about.html': {
+    'about': {
         title: '首页 - ' + webTile,
         pageNav: 'about'
     },
-    'error.html': {
+    'error': {
         title: '错误 - ' + webTile,
         message: '错误message',
         error: {
@@ -30,8 +25,9 @@ let renderData = {
 };
 
 //html模板所在页面
-const tempaltePath = 'dist/' + sysConfig.dev.tplPath + '/';
-const outPutPath = 'dist/';
+const tempaltePath = files.tplPath;
+// 'dist/'
+const outPutPath = files.buildPath;
 // rm('-rf',  path.join(rootPath, outPutPath));
 /**
  * node端html模板渲染函数
@@ -42,7 +38,7 @@ const outPutPath = 'dist/';
  */
 let nodeRenderFn = function (htmlToString, renderData, options) {
     return artTemplateRenderFn(htmlToString, renderData, Object.assign({}, {
-        root: rootPath + tempaltePath,
+        root: tempaltePath,
         extname: '.html'
         // imports: {
         //     outSide: function (name) {
@@ -51,25 +47,27 @@ let nodeRenderFn = function (htmlToString, renderData, options) {
         // }
     }, options));
 };
-const entries = common.getEntry(path.join(rootPath, tempaltePath + '*.html'), path.join(rootPath, tempaltePath));
+const entries = utils.getEntry(tempaltePath + '/*.html', tempaltePath + '/', (value) => {
+    return value;
+});
 
 for (let item of Object.keys(entries)) {
-    console.log('item  = ', item);
-    console.log('entries(item)  = ', entries[item]);
     let filePath = entries[item];
     fs.readFile(filePath, function (e, v) {
             let ret = v.toString();
             const template = nodeRenderFn(ret, renderData[item]);
 
-            let dirname = path.join(rootPath, outPutPath);
+            let dirname = outPutPath;
             if (!fs.existsSync(dirname)) {
                 mkdir('-p', dirname);
             }
-            fs.writeFile(path.join(rootPath, outPutPath + item), template, function (err) {
+            const file_html = `${outPutPath}/${item}.html`;
+            fs.writeFile(file_html, template, function (err) {
+                console.log('build  ----- ', file_html);
                 if (err) throw err;
             });
         }
     );
 }
 
-// rm('-rf',  path.join(rootPath, tempaltePath));
+// rm('-rf', tempaltePath);
