@@ -10,11 +10,18 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/about.html', function (req, res, next) {
+router.get('/about', function (req, res, next) {
     res.render('about.html', {
         title: '关于 - ' + webTile,
         pageNav: 'about'
     });
+});
+
+router.get('/login', function (req, res, next) {
+  res.render('login.html', {
+    title: '登录 - ' + webTile,
+    pageNav: 'login'
+  });
 });
 
 module.exports = router;

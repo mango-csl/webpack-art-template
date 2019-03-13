@@ -1,13 +1,13 @@
 // 移除node开发环境，webpack警告
 process.noDeprecation = true;
 
-const path = require('path');
+// const path = require('path');
 const webpack = require('webpack');
 const sysConfig = require('../config/index');
 const utils = require('./utils');
 
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-// const merge = require('webpack-merge');
+const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Es3ifyPlugin = require('es3ify-webpack-plugin');
 const files = require('../config/files');
@@ -16,13 +16,22 @@ const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 const chunks = Object.keys(entries);
 
 let webpackConfig = {
-    entry: entries,
+    entry: merge({
+        // layui: `${files.staticPath}/lib/layui/layui.js`,
+        // jquery: ['jquery']
+    }, entries),
     output: {
         path: files.buildPath,
         filename: '[name].js',
         publicPath: process.env.NODE_ENV === 'production'
             ? sysConfig.build.assetsPublicPath
             : sysConfig.dev.assetsPublicPath
+    },
+    resolve: {
+        extensions: ['.js']
+    },
+    externals: {
+        // 'layui': 'window.layui' // 使用时，依旧用require的方式来使用，webpack不会把它编译进文件里
     },
     module: {
         rules: [
@@ -100,8 +109,13 @@ let webpackConfig = {
     plugins: [
         new Es3ifyPlugin(),
         new webpack.ProvidePlugin({ // 加载jq
-            $: 'jquery'
+            // $: 'jquery'
         }),
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //     jQuery: 'jquery',
+        //     'window.jQuery': 'jquery'
+        // }),
         new CommonsChunkPlugin({
             name: 'vendors', // 将公共模块提取，生成名为`vendors`的chunk
             chunks: chunks,
@@ -134,6 +148,14 @@ pages.forEach(function (pathname) {
         conf.favicon = files.faviconPath;
         conf.inject = 'body';
         conf.chunks = ['vendors', pathname];
+        // conf.chunks = ['vendors', 'jquery', pathname];
+        // conf.chunksSortMode = function (chunk1, chunk2) {
+        //         //     const order = ['vendors', 'jquery', 'layui', pathname];
+        //         //     const order1 = order.indexOf(chunk1.names[0]);
+        //         //     const order2 = order.indexOf(chunk2.names[0]);
+        //         //     return order1 - order2;
+        //         // };
+        conf.chunksSortMode = 'manual';
         conf.hash = true;
     }
     webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));

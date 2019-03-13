@@ -1,0 +1,57 @@
+/* laydate日期与时间选择器样式，concise简洁的背景主题 */
+
+.laydate-theme-concise {
+    border: none;
+}
+
+.laydate-theme-concise .layui-laydate-header {
+    border-bottom: none;
+}
+
+.laydate-theme-concise .layui-laydate-header i:hover,
+.laydate-theme-concise .layui-laydate-header span:hover {
+    color: #1886E3;
+}
+
+.laydate-theme-concise .layui-laydate-content {
+    border: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.laydate-theme-concise .layui-laydate-content th {
+    color: #1886e3;
+}
+
+.laydate-theme-concise .laydate-main-list-1 .layui-laydate-content {
+    border-left: none;
+}
+
+.laydate-theme-concise .layui-laydate-footer {
+    border: none;
+}
+
+.laydate-theme-concise .layui-laydate-footer span:hover {
+    color: #1886E3
+}
+
+.laydate-theme-concise .laydate-footer-btns span {
+    border: none;
+}
+
+.laydate-theme-concise .layui-this {
+    background-color: #1886E3 !important;
+    color: #fff !important;
+}
+
+
+.laydate-theme-concise, .layui-laydate-hint {
+    border: 1px solid #DCDCDC;;
+    box-shadow: 1px 9px 30px rgba(42, 83, 168, 0.2);
+    background-color: #fff;
+    color: #666;
+}
+
+.laydate-theme-concise .layui-laydate-footer span[lay-type=date] {
+    color: #1886E3
+}

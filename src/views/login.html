@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {{include './common/meta'}}
+</head>
+<body>
+{{include './common/header'}}
+<div class="g-bd">
+  <h1>djcpsAlert</h1>
+  <button class="layui-btn layui-btn-normal alert">djcpsAlert</button>
+  <h1>djcpsConfirm</h1>
+  <button class="layui-btn layui-btn-normal confirm">djcpsConfirm</button>
+  <h1>djcpsMsg</h1>
+  <button class="layui-btn layui-btn-normal msg">djcpsMsg</button>
+  <h1>djcpsLoad</h1>
+  <button class="layui-btn layui-btn-normal load1">打开1号load加载层</button>
+  <button class="layui-btn layui-btn-normal load2">打开2号load加载层</button>
+  <button class="layui-btn layui-btn-normal load3">打开3号load加载层</button>
+  <h1>djcpsTips</h1>
+  <button class="layui-btn layui-btn-normal tips">djcpsTips</button>
+  <h1>djcpsProgress</h1>
+  <div class="layui-progress" lay-showPercent="true">
+    <div class="layui-progress-bar" lay-percent="10%"></div>
+  </div>
+  <div id="progress"></div>
+  <h1>djcpsCarousel</h1>
+  <div id="carousel"></div>
+  <div id="carouselInner"></div>
+  <h1>djcpsModal</h1>
+  <button class="layui-btn layui-btn-normal dom">页面层</button>
+  <button class="layui-btn layui-btn-normal iframe">iframe层</button>
+  <div id="modal">
+    <p>随便加几个元素测试弹窗</p>
+    <input type="text">
+    <button class="layui-btn layui-btn-normal">按钮</button>
+  </div>
+  <h1>djcpsPage()</h1>
+  <div id="lv"></div>
+  <div class="list">
+    <ul>
+      <script id="pageList" type="text/html">
+        {{each person}}
+        <li>{{$value.name}}</li>
+        {{/each}}
+      </script>
+
+    </ul>
+  </div>
+  <div id="page"></div>
+  <div id="pageDefault"></div>
+
+  <h1>djcpsUpload()</h1>
+  <div class="layui-container">
+    <button type="button" class="layui-btn" id="upload1">
+      <i class="layui-icon">&#xe67c;</i>上传图片
+    </button>
+    <button class="layui-btn" id="uploadBtn">开始上传</button>
+    <button class="layui-btn" id="reupload">继续上传</button>
+    <table class="layui-table">
+      <thead>
+      <tr>
+        <th>文件名</th>
+        <th>预览图</th>
+        <th>大小</th>
+        <th>状态</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="uploadBody">
+
+      </tbody>
+    </table>
+  </div>
+  <h1>djcpsDate</h1>
+  <div class="layui-container">
+    <div class="layui-row" style="margin-top: 10px;">
+      <h1>时间点选择</h1>
+      <h2>date日期选择器</h2>
+      <div id="date"></div>
+      <h2>year年选择器</h2>
+      <div id="year"></div>
+      <h2>month年月选择器</h2>
+      <div id="month"></div>
+      <h2>time时间选择器</h2>
+      <div id="time"></div>
+      <h2>datetime日期时间选择器</h2>
+      <div id="datetime"></div>
+      <br>
+      <h1>时间段选择</h1>
+      <h2>date日期选择器</h2>
+      <div id="dateRange"></div>
+      <h2>year年选择器</h2>
+      <div id="yearRange"></div>
+      <h2>month年月选择器</h2>
+      <div id="monthRange"></div>
+      <h2>time时间选择器</h2>
+      <div id="timeRange"></div>
+      <h2>datetime日期时间选择器</h2>
+      <div id="datetimeRange"></div>
+      <br>
+      <h1>其他风格</h1>
+      <h2>molv墨绿背景datetime日期时间选择器</h2>
+      <div id="datetimeRangeMolv"></div>
+      <h2>custom自定义颜色#393D49-datetime日期时间选择器</h2>
+      <div id="datetimeRangeCustom"></div>
+      <h2>grid格子主题datetime日期时间选择器</h2>
+      <div id="datetimeRangeGrid"></div>
+      <h2>concise自定义样式datetime日期时间选择器</h2>
+      <div id="datetimeRangeConcise"></div>
+      <br>
+    </div>
+  </div>
+  <h1>djcpsTree</h1>
+  <div class="layui-container">
+    <div class="layui-row" style="margin-top: 10px;">
+      <div>简洁风格</div>
+      <div id="tree"></div>
+      <div>--------------------------------------------------</div>
+      <div>默认风格</div>
+      <div id="defaultTree"></div>
+    </div>
+  </div>
+  <h1>djcpsFlow</h1>
+  <div class="clearfix" style="width: 1349px">
+    <ul id="layflow" class="layflow"></ul>
+    <ul id="layflowlazy" class="layflowlazyimg"></ul>
+  </div>
+  <h1>djcpsPanel</h1>
+  <button class="laypanel-switch" id="laypanel">批量展开</button>
+  <div id="panel"></div>
+  <h1>djcpsForm(图片上传会卡住页面)</h1>
+  <div id="form">
+    <div id="uploadPic">
+      <button type="button" class="layui-btn" id="test1">
+        <i class="layui-icon">&#xe67c;</i>上传图片
+      </button>
+      <img class="layui-upload-img" id="demo1">
+      <p id="demoText"></p>
+    </div>
+    <div id="item">
+      <label class="layui-form-label">自定义模块</label>
+      <div class="layui-input-block">
+        <input type="password" name="psd" lay-verify="aaa" autocomplete="off" placeholder="密码" class="layui-input">
+      </div>
+    </div>
+    <div id="formBtn">
+      <button class="layui-btn" lay-submit lay-filter="submit">提交</button>
+      <button type="reset" class="layui-btn">重置</button>
+    </div>
+  </div>
+</div>
+{{include './common/footer'}}
+</body>
+</html>

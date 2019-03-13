@@ -1,0 +1,10 @@
+<link rel="stylesheet" id="progressCss" href="/static/components/modules/djcpsProgress/djcpsProgress.css">
+<script type="text/html" id="progressTpl">
+    <div class="layui-progress {{ d.bigProgress ? 'layui-progress-big' : ''}}" lay-showPercent="true" lay-filter="{{d.filter}}">
+        <div class="layui-progress-bar" lay-percent="10%">
+            {{# if(d.showPercent) { }}
+                <span class="layui-progress-text">{{d.percent}}</span>
+            {{# } }}
+        </div>
+    </div>
+</script>

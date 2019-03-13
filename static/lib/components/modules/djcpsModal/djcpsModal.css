@@ -1,0 +1,18 @@
+.cps-layer-modal {
+    -webkit-border-radius: 0 0 12px 12px;
+    -moz-border-radius: 0 0 12px 12px;
+    -ms-border-radius: 0 0 12px 12px;
+    border-radius: 0 0 12px 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0px 10px;
+}
+
+.cps-layer-modal .layui-layer-title {
+    background: #fff;
+    border-bottom: 1px solid #b3b3b3;
+    -webkit-border-radius: 12px 12px 0 0;
+    -moz-border-radius: 12px 12px 0 0;
+    -ms-border-radius: 12px 12px 0 0;
+    border-radius: 12px 12px 0 0;
+}
