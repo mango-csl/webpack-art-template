@@ -2,8 +2,8 @@
 process.noDeprecation = true;
 
 const webpack = require('webpack');
-const sysConfig = require('../sysConfig');
-const files = require('../sysConfig/files');
+const sysConfig = require('../config/index');
+const files = require('../config/files');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const utils = require('./utils');
@@ -12,11 +12,6 @@ const baseWebpackConfig = require('./webpack.base.conf');
 
 let webpackConfig = merge(baseWebpackConfig, {
     output: {
-        // // path: join(__dirname, 'dist/static'),
-        // path: sysConfig.build.outPutPath,
-        // publicPath: `.${sysConfig.build.publicPath}/`,
-        // filename: 'scripts/[name].js',
-        // chunkFilename: 'scripts/[id].chunk.js?[chunkhash]'
         path: files.buildPath,
         filename: utils.assetsPath('js/[name].[chunkhash].js'),
         chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
@@ -26,32 +21,6 @@ let webpackConfig = merge(baseWebpackConfig, {
         rules: []
     },
     plugins: [
-        // new UglifyJsPlugin({ // 压缩代码
-        //     output: {
-        //         screw_ie8: false,
-        //         beautify: true, //有正常的空格和断句，注释也会保留，
-        //         comments: true,
-        //         keep_quoted_props: true
-        //     },
-        //     screw_ie8: false,
-        //     compress: {
-        //         warnings: false, properties: false,screw_ie8: false
-        //     },
-        //     mangle: {
-        //         screw_ie8: false,
-        //         except: ['$']
-        //     },
-        //     except: ['$super', '$', 'exports', 'require'] // 排除关键字
-        // }),
-        // new UglifyJSPlugin({
-        //     compress: {screw_ie8: false},
-        //     output: {screw_ie8: false},
-        //     mangle: {
-        //         screw_ie8: false,
-        //         except: ['$']
-        //     },
-        //     support_ie8: true
-        // })
         new CleanWebpackPlugin([files.buildPath]),
         new webpack.optimize.UglifyJsPlugin({ // 压缩代码
             output: {

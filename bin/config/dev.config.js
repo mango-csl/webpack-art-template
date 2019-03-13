@@ -1,6 +1,6 @@
 module.exports = {
     productionSourceMap: false,
-    // BASIC_URL:'http://192.168.2.167:6666',
+    screw_ie8:false,
     BASIC_URL: 'http://192.168.23.7:80',
     WEBSOCKET_URL: 'ws://192.168.2.94:8080/djwmsservice'
     // BASIC_URL: 'http://192.168.2.74:8081',// 德星

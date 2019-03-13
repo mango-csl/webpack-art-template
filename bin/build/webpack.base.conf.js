@@ -3,14 +3,14 @@ process.noDeprecation = true;
 
 const path = require('path');
 const webpack = require('webpack');
-const sysConfig = require('../sysConfig');
+const sysConfig = require('../config/index');
 const utils = require('./utils');
 
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 // const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Es3ifyPlugin = require('es3ify-webpack-plugin');
-const files = require('../sysConfig/files');
+const files = require('../config/files');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
 const chunks = Object.keys(entries);
@@ -114,7 +114,7 @@ let webpackConfig = {
 
 const pages = Object.keys(utils.getEntry('src/views/**/*.html', 'src/views/'));
 pages.forEach(function (pathname) {
-    pathname.replace('')
+    pathname.replace('');
     const conf = {
         filename: '../' + files.tplName + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
         template: 'src/views/' + pathname + '.html', // html模板路径
@@ -131,7 +131,7 @@ pages.forEach(function (pathname) {
         // }
     };
     if (pathname in webpackConfig.entry) {
-        conf.favicon = path.resolve(__dirname, '../src/imgs/favicon.ico');
+        conf.favicon = files.faviconPath;
         conf.inject = 'body';
         conf.chunks = ['vendors', pathname];
         conf.hash = true;

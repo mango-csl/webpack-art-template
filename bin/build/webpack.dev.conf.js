@@ -2,9 +2,9 @@
 process.noDeprecation = true;
 
 const webpack = require('webpack');
-const sysConfig = require('../sysConfig/index');
+const sysConfig = require('../config/index');
 const merge = require('webpack-merge');
-const files = require('../sysConfig/files');
+const files = require('../config/files');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const baseWebpackConfig = require('./webpack.base.conf');
 

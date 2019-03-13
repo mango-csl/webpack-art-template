@@ -1,13 +1,12 @@
 const express = require('express');
 // const fs = require('fs');
 // require('shelljs/global');
-const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const merge = require('webpack-merge');
-const sysConfig = require('../sysConfig/index');
-const files = require('../sysConfig/files');
+const sysConfig = require('../config/index');
+const files = require('../config/files');
 const routes = require('./routes/index');
 
 // 代理插件

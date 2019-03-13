@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node server/webpackDevServer\" \"node server/expressServer\"",
+    "start": "concurrently \"node bin/server/webpackDevServer\" \"node bin/server/expressServer\"",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "build:webpack": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress --hide-modules",
-    "node:compile": "node build/compile_node/compile-art-template",
+    "build:webpack": "cross-env NODE_ENV=production webpack --config bin/build/webpack.prod.conf.js --progress --hide-modules",
+    "node:compile": "node bin/build/compile-art-template",
     "build": "npm run build:webpack&&npm run node:compile"
   },
   "keywords": [],

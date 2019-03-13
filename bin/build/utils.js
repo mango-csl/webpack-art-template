@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const config = require('../sysConfig');
+const config = require('../config/index');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const glob = require('glob');
 // const packageConfig = require('../package.json');

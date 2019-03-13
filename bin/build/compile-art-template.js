@@ -1,7 +1,7 @@
-const {artTemplateRenderFn} = require('../lib/art-template');
+const {artTemplateRenderFn} = require('./lib/art-template');
 const fs = require('fs');
-const utils = require('../utils');
-const files = require('../../sysConfig/files');
+const utils = require('./utils');
+const files = require('../config/files');
 require('shelljs/global');
 
 const webTile = '各个页面统一title';

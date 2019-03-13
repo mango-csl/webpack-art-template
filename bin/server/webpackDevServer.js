@@ -6,8 +6,8 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('../build/webpack.dev.conf');
-const files = require('../sysConfig/files');
-const sysConfig = require('../sysConfig/index');
+const files = require('../config/files');
+const sysConfig = require('../config/index');
 require('shelljs/global');
 
 let expressPort = sysConfig.dev.expressPort || 24999;
@@ -21,8 +21,8 @@ const options = {
     host: sysConfig.dev.host,
     proxy: {
         '*': 'http://localhost:' + expressPort
-    }
-    // open: sysConfig.dev.autoOpenBrowser
+    },
+    open: sysConfig.dev.autoOpenBrowser
 };
 
 WebpackDevServer.addDevServerEntrypoints(config, options);
