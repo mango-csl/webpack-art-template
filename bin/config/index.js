@@ -1,13 +1,14 @@
 'use strict';
-// todo 改文件定义为webpack 有关的配置，包括开发环境的一些配置，需要迁移到build 目录
 let dev_config;
 try {
+    // 本地维护，不上传github
     dev_config = require('./dev.config');
 } catch (e) {
     dev_config = {};
 }
 module.exports = {
     dev: {
+        cssSourceMap: true,
         host: '0.0.0.0',
         serverPort: 2082,
         expressPort: 24999,
@@ -28,10 +29,17 @@ module.exports = {
         // assetsRoot: path.resolve(__dirname, '../dist'),
         assetsPublicPath: '/',
         assetsSubDirectory: 'static', //静态资源指向目录
+        bundleAnalyzerReport: false, //会打断npm && npm 这类npm指令继续执行
+        // Gzip off by default as many popular static hosts such as
+        // Surge or Netlify already gzip all static assets for you.
+        // Before setting to `true`, make sure to:
+        // npm install --save-dev compression-webpack-plugin
+        productionGzip: true,
+        productionGzipExtensions: ['js', 'css'],
+
         // publicPath: '/static',
         // outPutPath: path.join(__dirname, '../dist/static'),
         // tplPath: 'temp_views',
-        productionSourceMap: false,
-        screw_ie8: false
+        productionSourceMap: false
     }
 };

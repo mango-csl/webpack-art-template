@@ -5,6 +5,7 @@ const files = require('../config/files');
 require('shelljs/global');
 
 const webTile = '各个页面统一title';
+// todo renderData 存到其他地方（node服务器？）
 let renderData = {
     'index': {
         title: '首页 - ' + webTile,
@@ -37,6 +38,7 @@ const outPutPath = files.buildPath;
  * @returns {*}
  */
 let nodeRenderFn = function (htmlToString, renderData, options) {
+    // todo layui标签模板引入时，会被编译
     return artTemplateRenderFn(htmlToString, renderData, Object.assign({}, {
         root: tempaltePath,
         extname: '.html'

@@ -7,19 +7,20 @@ const sysConfig = require('../config/index');
 const utils = require('./utils');
 
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-const merge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const merge = require('webpack-merge');
+
 const Es3ifyPlugin = require('es3ify-webpack-plugin');
 const files = require('../config/files');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const entries = utils.getEntry('src/scripts/page/**/*.js', 'src/scripts/page/');
+const entries = utils.getEntry(files.appPath + '/scripts/page/**/*.js', files.appPath + '/scripts/page/');
 const chunks = Object.keys(entries);
 
 let webpackConfig = {
-    entry: merge({
-        // layui: `${files.staticPath}/lib/layui/layui.js`,
-        // jquery: ['jquery']
-    }, entries),
+    // entry: merge({
+    //     // layui: `${files.staticPath}/lib/layui/layui.js`,
+    //     // jquery: ['jquery']
+    // }, entries,
+    entry: entries,
     output: {
         path: files.buildPath,
         filename: '[name].js',
@@ -51,25 +52,6 @@ let webpackConfig = {
                         //plugins: ['transform-runtime', 'proxy']
                     }
                 }
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
-            {
-                test: /\.less$/,
-                use: [{
-                    loader: "style-loader"
-                }, {
-                    loader: "css-loader", options: {
-                        // todo dev true ?pro false?
-                        sourceMap: true
-                    }
-                }, {
-                    loader: "less-loader", options: {
-                        sourceMap: true
-                    }
-                }]
             },
             {
                 test: /\.html$/,
@@ -108,9 +90,9 @@ let webpackConfig = {
     },
     plugins: [
         new Es3ifyPlugin(),
-        new webpack.ProvidePlugin({ // 加载jq
-            // $: 'jquery'
-        }),
+        // new webpack.ProvidePlugin({ // 加载jq
+        //     // $: 'jquery'
+        // }),
         // new webpack.ProvidePlugin({
         //     $: 'jquery',
         //     jQuery: 'jquery',
@@ -120,18 +102,18 @@ let webpackConfig = {
             name: 'vendors', // 将公共模块提取，生成名为`vendors`的chunk
             chunks: chunks,
             minChunks: chunks.length // 提取所有entry共同依赖的模块
-        }),
-        new ExtractTextPlugin('styles/[name].css') // 单独使用link标签加载css并设置路径，相对于output配置中的publickPath
+        })
 
     ]
 };
-
-const pages = Object.keys(utils.getEntry('src/views/**/*.html', 'src/views/'));
+const html = utils.getEntry(files.htmlPath + '/**/*.html', files.htmlPath + '/');
+const pages = Object.keys(html);
 pages.forEach(function (pathname) {
     pathname.replace('');
     const conf = {
-        filename: '../' + files.tplName + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
-        template: 'src/views/' + pathname + '.html', // html模板路径
+        // filename: '../' + files.tplName + '/' + pathname + '.html', // 生成的html存放路径，相对于outPutPath
+        filename: `${files.tplPath}/${pathname}.html`, // 生成的html存放路径，相对于outPutPath
+        template: `${files.htmlPath}/${pathname}.html`, // html模板路径
         inject: false // js插入的位置，true/'head'/'body'/false
         /*
          * 压缩这块，调用了html-minify，会导致压缩时候的很多html语法检查问题，
@@ -147,7 +129,7 @@ pages.forEach(function (pathname) {
     if (pathname in webpackConfig.entry) {
         conf.favicon = files.faviconPath;
         conf.inject = 'body';
-        conf.chunks = ['vendors', pathname];
+        conf.chunks = ['manifest', 'vendors', pathname];
         // conf.chunks = ['vendors', 'jquery', pathname];
         // conf.chunksSortMode = function (chunk1, chunk2) {
         //         //     const order = ['vendors', 'jquery', 'layui', pathname];

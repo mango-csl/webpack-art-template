@@ -3,6 +3,7 @@ const path = require('path');
 const config = require('../config/index');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const glob = require('glob');
+const files_config = require('../config/files');
 // const packageConfig = require('../package.json');
 
 /**
@@ -17,6 +18,7 @@ exports.assetsPath = function (_path) {
 
     return path.posix.join(assetsSubDirectory, _path);
 };
+
 exports.cssLoaders = function (options) {
     options = options || {};
 
@@ -36,9 +38,8 @@ exports.cssLoaders = function (options) {
 
     // generate loader string to be used with extract text plugin
     function generateLoaders(loader, loaderOptions) {
-        // todo 暂时移除postcssLoader
-        // const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader];
-        const loaders = [cssLoader];
+        const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader];
+        // const loaders = [cssLoader];
         if (loader) {
             loaders.push({
                 loader: loader + '-loader',
@@ -50,14 +51,14 @@ exports.cssLoaders = function (options) {
 
         // Extract CSS when that option is specified
         // (which is the case during production build)
-        // if (options.extract) {
-        return ExtractTextPlugin.extract({
-            use: loaders
-            // fallback: 'vue-style-loader'
-        });
-        // } else {
-        //     return ['vue-style-loader'].concat(loaders);
-        // }
+        if (options.extract) {
+            return ExtractTextPlugin.extract({
+                use: loaders,
+                fallback: 'style-loader'
+            });
+        } else {
+            return ['style-loader'].concat(loaders);
+        }
     }
 
     // https://vue-loader.vuejs.org/en/configurations/extract-css.html
@@ -95,6 +96,8 @@ exports.styleLoaders = function (options) {
  * @param formatFn 自定义内容格式
  */
 exports.getEntry = function (globPath, pathDir, formatFn) {
+    // globPath = files_config.rootPath + globPath;
+    // pathDir = files_config.rootPath + pathDir;
     const files = glob.sync(globPath);
     const entries = {};
     let {entry, dirname, basename, pathname, extname} = {};
@@ -109,7 +112,7 @@ exports.getEntry = function (globPath, pathDir, formatFn) {
         if (pathname.startsWith(pathDir)) {
             pathname = pathname.substring(pathDir.length);
         }
-        entries[pathname] = formatFn ? formatFn(entry) : ['./' + entry];
+        entries[pathname] = formatFn ? formatFn(entry) : [entry];
     }
     return entries;
 };
