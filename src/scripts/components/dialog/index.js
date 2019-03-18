@@ -13,4 +13,5 @@ module.exports = function () {
     });
     $('body').append($dialog);
     $dialog.fadeIn();
+    console.log('123124');
 };

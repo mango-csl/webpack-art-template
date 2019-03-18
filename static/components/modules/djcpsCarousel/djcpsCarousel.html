@@ -1,0 +1,22 @@
+<link rel="stylesheet" id="carouselCss" href="/static/components/modules/djcpsCarousel/djcpsCarousel.css">
+<script type="text/html" id="carouselTpl">
+<div class="layui-carousel carouselContent" lay-filter="{{d.filter}}">
+    <div carousel-item>
+        {{# if (d.options.type === 'img') { }}
+            {{# layui.each(d.data, function(index, item) {  }}
+                <div class="carouseImg">
+                    <img src="{{item[d.options.prop]}}" >
+                </div>
+            {{#  }) }}
+        {{# } else if (d.options.type === 'text') { }}
+            {{# layui.each(d.data, function(index, item) {  }}
+                <div class="carouseText">
+                    <p>{{item[d.options.prop]}}</p>
+                </div>
+            {{#  }) }}
+        {{# } else if (d.options.type === 'custom') { }}
+            {{d.options.customHtml}}
+        {{# } }}
+    </div>
+</div>
+</script>
