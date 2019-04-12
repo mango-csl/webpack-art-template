@@ -2,5 +2,6 @@ node_modules
 package-lock.json
 .idea
 temp_views
-src/compileViews
 dist
+/bin/config/dev.config.js
+/test/temp/

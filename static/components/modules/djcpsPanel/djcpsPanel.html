@@ -1,0 +1,11 @@
+<link rel="stylesheet" id="panelCss" href="/static/components/modules/djcpsPanel/djcpsPanel.css">
+<script type="text/html" id="panelTpl">
+    <div class="layui-collapse" {{d.layAccordion?'lay-accordion':''}}>
+        {{# layui.each(d.data, function(index, item) {  }}
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">{{item.title}}</h2>
+            <div class="layui-colla-content">{{item.content}}</div>
+        </div>
+        {{# }) }}
+    </div>
+</script>

@@ -1,0 +1,13 @@
+/* tree树形菜单样式，concise简洁的背景主题 */
+
+.layui-tree-skin-concise .layui-tree-branch {
+    color: #1886E3;
+}
+
+.layui-tree-skin-concise li .layui-tree-spread, .layui-tree-skin-concise li a:hover {
+    color: #1886E3;
+}
+
+.layui-tree-skin-concise li a i {
+    font-size: 0;
+}

@@ -1,0 +1,33 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "ie>=8",
+            "chrome>=49"
+          ]
+        },
+        "loose": true,
+        "modules": false,
+        "debug": false,
+        "uglify": false,
+        "useBuiltIns": true
+      }
+    ],
+    "es2015-loose",
+    "stage-0"
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "corejs": false,
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ]
+}
